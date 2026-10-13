@@ -1,0 +1,35 @@
+{
+  "name": "Vatsal Kanojiya",
+  "role": "Python Backend Engineer",
+  "location": "Bengaluru, India",
+  "headline": "I build the quiet machinery behind businesses.",
+  "intro": "Backend engineer shipping production ERP, billing, HR and payment systems on Frappe/ERPNext — and building on Django, DRF, Celery and PostgreSQL. I own delivery end to end: from the client workshop, through data modelling and APIs, to release.",
+  "careerStart": "2023-12-01",
+  "email": "vatsalkanojiya@gmail.com",
+  "links": {
+    "github": "https://github.com/Vatsal-Kanojiya",
+    "linkedin": "https://www.linkedin.com/in/vatsal-kanojiya-615a10132",
+    "resume": "/Vatsal_Kanojiya_Resume.pdf"
+  },
+  "openTo": "Open to backend roles — Django, Python, PostgreSQL.",
+  "stats": [
+    { "value": "{years}", "label": "years shipping production backends" },
+    { "value": "5–6", "label": "concurrent client projects owned" },
+    { "value": "5s → 1s", "label": "report time after killing N+1 queries" },
+    { "value": "50+", "label": "technical interviews conducted" }
+  ],
+  "skills": [
+    { "group": "Languages", "items": ["Python", "SQL", "JavaScript"] },
+    { "group": "Frameworks", "items": ["Django", "Django REST Framework", "Frappe / ERPNext v15"] },
+    { "group": "Backend", "items": ["REST APIs", "Celery", "Redis / RQ jobs", "Schedulers", "Transactions & row locking", "Query optimisation"] },
+    { "group": "Data", "items": ["PostgreSQL", "pgvector", "Full-text search", "MySQL / MariaDB", "Schema design", "Indexing"] },
+    { "group": "Tooling", "items": ["Django tests / unittest", "Git", "GitHub Actions", "Docker Compose", "Gunicorn", "Nginx", "Linux", "AWS EC2 / S3"] },
+    { "group": "Integrations", "items": ["Razorpay", "WhatsApp Business API", "FCM", "Zoom", "Biometric devices", "SMS / email gateways"] }
+  ],
+  "process": [
+    { "step": "Spec", "text": "Write acceptance criteria before a line of code. The spec is the contract — for me and for the agent." },
+    { "step": "Build", "text": "Claude Code agents implement against the spec. I steer architecture, data model and edge cases." },
+    { "step": "Verify", "text": "Verification scripts run inside rolled-back transactions, so real data is exercised and nothing is left behind." },
+    { "step": "Review", "text": "Every generated diff is read by me. That's how a quantity above the top slab billing at ₹0 got caught before release." }
+  ]
+}

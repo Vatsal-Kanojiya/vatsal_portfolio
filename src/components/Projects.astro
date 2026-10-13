@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import ProjectVisual from './ProjectVisual.astro';
+import { visible } from '../lib/site';
+
+const projects = (await getCollection('projects', visible)).sort((a, b) => a.data.order - b.data.order);
+const statusLabel = { live: 'Live', 'in-progress': 'In progress', archived: 'Archived' } as const;
+---
+<section id="projects" class="mx-auto max-w-5xl px-6 py-28">
+  <SectionHead index="03" eyebrow="Projects" title="Things I build<br/><em class='text-accent'>to go deeper.</em>"
+    lead="Personal Django projects where I chase the hard parts: concurrency, idempotency, retrieval. Open one to see the full story." />
+
+  <div class="space-y-8">
+    {projects.map(({ id, data }, i) => (
+      <a href={`/projects/${id}/`} class="group grid overflow-hidden rounded-3xl border border-line bg-surface transition duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_30px_60px_-30px_var(--accent)] md:grid-cols-2"
+        data-reveal style={`--d:${i * 80}ms`}>
+        <div class="relative aspect-[16/10] overflow-hidden md:aspect-auto md:min-h-80">
+          {data.cover
+            ? <Image src={data.cover} alt={`${data.title} screenshot`} widths={[640, 1280]} sizes="(min-width: 768px) 32rem, 100vw" class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" />
+            : <ProjectVisual title={data.title} seed={i + 3} class="h-full w-full transition duration-700 group-hover:scale-[1.03]" />}
+        </div>
+        <div class="flex flex-col p-7 sm:p-9">
+          <p class="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-line px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted">
+            <span class={`size-1.5 rounded-full ${data.status === 'live' ? 'bg-accent' : 'bg-warm'}`}></span>{statusLabel[data.status]}
+          </p>
+          <h3 class="font-display text-3xl tracking-tight">{data.title}</h3>
+          <p class="mt-2 text-accent">{data.tagline}</p>
+          <p class="mt-4 leading-relaxed text-muted">{data.summary}</p>
+          <ul class="mt-6 flex flex-wrap gap-1.5">
+            {data.stack.map((s) => <li class="rounded-full bg-bg px-2.5 py-1 font-mono text-[11px] text-muted">{s}</li>)}
+          </ul>
+          <span class="mt-auto pt-8 text-sm font-medium">Read the case study <span class="inline-block transition group-hover:translate-x-1">→</span></span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

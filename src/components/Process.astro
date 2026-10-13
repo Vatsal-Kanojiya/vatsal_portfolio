@@ -1,0 +1,19 @@
+---
+import profile from '../data/profile.json';
+import SectionHead from './SectionHead.astro';
+---
+<section class="bg-band text-band-ink">
+  <div class="mx-auto max-w-5xl px-6 py-28 [--muted:color-mix(in_oklab,var(--band-ink)_62%,var(--band))] [--accent:var(--band-ink)]">
+    <SectionHead index="04" eyebrow="How I work" title="AI agents write code.<br/><em class='text-warm'>I own what ships.</em>"
+      lead="I use Claude Code daily under a spec-first process. Speed from the agent, rigour from the process." />
+    <ol class="grid gap-px overflow-hidden rounded-2xl bg-band-ink/15 sm:grid-cols-2 lg:grid-cols-4">
+      {profile.process.map((p, i) => (
+        <li class="bg-band p-7" data-reveal style={`--d:${i * 90}ms`}>
+          <p class="font-mono text-xs text-warm">0{i + 1}</p>
+          <h3 class="mt-3 font-display text-2xl">{p.step}</h3>
+          <p class="mt-3 text-[15px] leading-relaxed opacity-70">{p.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

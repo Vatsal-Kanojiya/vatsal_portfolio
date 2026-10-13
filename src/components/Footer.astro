@@ -1,0 +1,9 @@
+---
+import profile from '../data/profile.json';
+---
+<footer class="border-t border-line">
+  <div class="mx-auto flex max-w-5xl flex-col gap-2 px-6 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+    <p>© {new Date().getFullYear()} {profile.name}. Built with Astro.</p>
+    <p class="font-mono text-xs">{profile.location}</p>
+  </div>
+</footer>

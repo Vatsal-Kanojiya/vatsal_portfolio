@@ -1,0 +1,17 @@
+---
+// Calm generative cover used until a real screenshot is added to the project.
+interface Props { title: string; seed: number; class?: string }
+const { title, seed, class: cls = '' } = Astro.props;
+const lines = Array.from({ length: 14 }, (_, i) => {
+  const y = 20 + i * 14;
+  const a = 10 + ((seed * 7 + i * 13) % 22);
+  const p = (seed * 31 + i * 17) % 100;
+  return `M -10 ${y} C 100 ${y - a} 160 ${y + a} 260 ${y - a / 2} S 380 ${y + p / 8} 420 ${y}`;
+});
+---
+<div class={`relative overflow-hidden bg-accent-soft ${cls}`}>
+  <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 h-full w-full text-accent" aria-hidden="true">
+    {lines.map((d, i) => <path d={d} fill="none" stroke="currentColor" stroke-width="1" opacity={0.15 + (i % 4) * 0.08} />)}
+  </svg>
+  <span class="absolute bottom-5 left-6 font-display text-4xl italic text-accent sm:text-5xl">{title}</span>
+</div>

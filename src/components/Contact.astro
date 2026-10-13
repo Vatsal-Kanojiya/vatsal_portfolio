@@ -1,0 +1,32 @@
+---
+import profile from '../data/profile.json';
+const links = [
+  { label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
+  { label: 'LinkedIn', value: 'vatsal-kanojiya', href: profile.links.linkedin },
+  { label: 'GitHub', value: 'Vatsal-Kanojiya', href: profile.links.github },
+  { label: 'Résumé', value: 'Download PDF', href: profile.links.resume },
+];
+---
+<section id="contact" class="border-t border-line bg-surface/50">
+  <div class="mx-auto max-w-5xl px-6 py-32 text-center">
+    <p class="font-mono text-xs uppercase tracking-[.2em] text-accent" data-reveal>06 — Contact</p>
+    <h2 class="mx-auto mt-6 max-w-3xl font-display text-5xl leading-[1.05] tracking-tight sm:text-6xl" data-reveal style="--d:80ms">
+      Building something that has to <em class="text-accent">just work?</em>
+    </h2>
+    <p class="mx-auto mt-6 max-w-lg text-lg text-muted" data-reveal style="--d:160ms">{profile.openTo} I reply to every message.</p>
+    <a href={`mailto:${profile.email}`} class="mt-10 inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 font-medium text-bg transition hover:bg-accent" data-reveal style="--d:240ms">
+      Say hello →
+    </a>
+    <ul class="mx-auto mt-16 grid max-w-3xl gap-px overflow-hidden rounded-2xl border border-line bg-line text-left sm:grid-cols-2 md:grid-cols-5" data-reveal style="--d:320ms">
+      {links.map((l, i) => (
+        <li class={i === 0 ? 'md:col-span-2' : ''}>
+          <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener" download={l.label === 'Résumé' ? '' : undefined}
+            class="block h-full bg-bg p-5 transition hover:bg-accent-soft">
+            <span class="font-mono text-[11px] uppercase tracking-wider text-muted">{l.label}</span>
+            <span class="mt-1 block truncate text-sm">{l.value}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

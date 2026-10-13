@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource-variable/jetbrains-mono";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---- Design tokens: warm paper by day, deep forest-ink by night ---- */
+:root {
+  --bg: #f5f2ec;
+  --surface: #fbf9f5;
+  --ink: #1d1c1a;
+  --muted: #6b675f;
+  --line: #e2dcd1;
+  --accent: #2c6b5e;
+  --accent-soft: #dde9e4;
+  --warm: #b8692f;
+  --band: #1d1c1a;
+  --band-ink: #f1ede5;
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  --bg: #0e1312;
+  --surface: #141b19;
+  --ink: #e8e5de;
+  --muted: #9b9a92;
+  --line: #25302d;
+  --accent: #7cc4b0;
+  --accent-soft: #19302a;
+  --warm: #e2a46c;
+  --band: #17201e;
+  --band-ink: #e8e5de;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-warm: var(--warm);
+  --color-band: var(--band);
+  --color-band-ink: var(--band-ink);
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+}
+
+/* Native cross-page transitions — smooth, zero JS */
+@view-transition { navigation: auto; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .4s ease, color .4s ease;
+}
+::selection { background: var(--accent); color: var(--bg); }
+
+/* Paper grain — gives the calm, tactile feel */
+body::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 60;
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Scroll reveal (only hides content when JS is running) */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--d, 0ms);
+}
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+  @view-transition { navigation: none; }
+}
+
+/* Long-form case-study typography */
+.prose { font-size: 1.075rem; line-height: 1.8; color: var(--ink); }
+.prose h2 {
+  font-family: var(--font-display); font-size: 1.75rem; line-height: 1.25;
+  margin: 3rem 0 1rem; letter-spacing: -.01em;
+}
+.prose p { margin: 1rem 0; color: color-mix(in oklab, var(--ink) 85%, var(--muted)); }
+.prose ul { margin: 1rem 0; padding-left: 1.25rem; list-style: none; }
+.prose li { position: relative; margin: .5rem 0; }
+.prose li::before { content: ""; position: absolute; left: -1.1rem; top: .8em; width: .45rem; height: 1px; background: var(--accent); }
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose code {
+  font-family: var(--font-mono); font-size: .88em;
+  background: var(--accent-soft); color: var(--accent);
+  padding: .1em .35em; border-radius: .3rem;
+}
+.prose a { color: var(--accent); text-underline-offset: 3px; }

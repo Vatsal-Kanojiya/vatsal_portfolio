@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHead from './SectionHead.astro';
+import { visible } from '../lib/site';
+
+const roles = (await getCollection('experience', visible)).sort((a, b) => a.data.order - b.data.order);
+---
+<section id="work" class="border-t border-line bg-surface/50">
+  <div class="mx-auto max-w-5xl px-6 py-28">
+    <SectionHead index="02" eyebrow="Work" title="Production systems,<br/><em class='text-accent'>real stakes.</em>"
+      lead="ERP, billing, HR and payments for real businesses. Client names are withheld; the engineering is shown in full." />
+
+    <div class="space-y-20">
+      {roles.map(({ data }) => (
+        <article>
+          <header class="mb-8 flex flex-col gap-1 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between" data-reveal>
+            <div>
+              <h3 class="font-display text-3xl tracking-tight">{data.role}</h3>
+              <p class="mt-1 text-muted">{data.company} · {data.place}</p>
+            </div>
+            <p class="font-mono text-xs uppercase tracking-[.15em] text-muted">{data.period}</p>
+          </header>
+          {data.intro && <p class="mb-8 max-w-2xl text-lg leading-relaxed" data-reveal>{data.intro}</p>}
+          <div class="grid gap-4 sm:grid-cols-2">
+            {data.highlights.map((h, i) => (
+              <div class="group rounded-2xl border border-line bg-bg p-6 transition duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_20px_40px_-24px_var(--accent)]"
+                data-reveal style={`--d:${(i % 2) * 90}ms`}>
+                <h4 class="font-medium tracking-tight transition group-hover:text-accent">{h.title}</h4>
+                <p class="mt-2 text-[15px] leading-relaxed text-muted">{h.text}</p>
+                {h.tags.length > 0 && (
+                  <ul class="mt-4 flex flex-wrap gap-1.5">
+                    {h.tags.map((t) => <li class="rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] text-accent">{t}</li>)}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

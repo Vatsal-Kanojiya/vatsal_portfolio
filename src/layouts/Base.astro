@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import profile from '../data/profile.json';
+
+interface Props { title?: string; description?: string }
+const { title, description = profile.intro } = Astro.props;
+const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name} — ${profile.role}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#f5f2ec" />
+    <script is:inline>
+      // Set theme + JS flag before paint to avoid a flash
+      (function () {
+        var d = document.documentElement, t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        d.dataset.theme = t;
+        d.classList.add('js');
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded focus:bg-ink focus:px-3 focus:py-2 focus:text-bg">Skip to content</a>
+    <Nav />
+    <main id="main"><slot /></main>
+    <Footer />
+    <script>
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+const links = [
+  { href: '/#journey', label: 'Journey' },
+  { href: '/#work', label: 'Work' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+<header class="fixed inset-x-0 top-0 z-40">
+  <nav class="mx-auto mt-3 flex max-w-5xl items-center justify-between rounded-full border border-line/70 bg-bg/70 px-4 py-2 backdrop-blur-md sm:px-5 mx-4 sm:mx-auto">
+    <a href="/" class="font-display text-lg italic tracking-tight" aria-label="Home">vatsal<span class="text-accent">.</span></a>
+    <div class="flex items-center gap-1 sm:gap-2">
+      <ul class="hidden items-center gap-1 sm:flex">
+        {links.map((l) => (
+          <li><a href={l.href} class="rounded-full px-3 py-1.5 text-sm text-muted transition hover:bg-accent-soft hover:text-ink">{l.label}</a></li>
+        ))}
+      </ul>
+      <ThemeToggle />
+    </div>
+  </nav>
+</header>
