@@ -29,7 +29,7 @@ One site, same content, several complete atmospheres (fonts, colours, hero anima
 | View | Status | Idea |
 |---|---|---|
 | **Editorial** | ✅ built (current site) | Professional and modern. Fraunces serif + Inter, warm off-white / forest-ink themes, flow-field streamlines in the hero. |
-| **Terminal** | 💡 planned | Matrix / cyberpunk terminal. VT323 headings, JetBrains Mono body, phosphor green on black, scanlines and glow, blinking cursor, section titles like `$ cat journey.md`. Hero "code rain" built from the real stack (`SELECT`, `select_for_update`, `@shared_task`, `409`, …). Easter egg: typing `matrix` switches to this view. |
+| **Terminal** | ✅ built (v1) | Matrix / cyberpunk terminal. VT323 headings, JetBrains Mono body, phosphor green on black, scanlines and glow, blinking cursor, section titles like `$ cat journey.md`. Hero "code rain" built from the real stack (`SELECT`, `select_for_update`, `@shared_task`, `409`, …). Easter egg: typing `matrix` switches to this view. |
 | **Display** | 💡 planned | LED / LCD segment displays. DSEG 7/14-segment font for headings and numbers, with faint "ghost 8s" behind digits. Hero: a big live IST clock. Stats as LCD readouts. Light = calculator LCD, dark = amber train-board LED. |
 | **Paper** | ✅ built (v1) | A handwritten notebook. Dotted page with grain (ruled, graph and plain are one token away), blue-black ink, red pen, highlighter tags, taped cards, doodled underlines, margin notes, kraft-paper band, and a hand-sketched stack diagram that draws itself in the hero. Dark = black paper with gel pens. Caveat (text and headings) + Reenie Beanie (short margin scribbles only). The custom handwriting font is parked; see below. |
 

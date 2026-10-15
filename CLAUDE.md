@@ -35,14 +35,14 @@ Astro 7 (static output) + Tailwind CSS v4 (`@tailwindcss/vite`) + React islands 
 
 ## Views (switchable looks over the same content)
 
-Built: **Editorial** (default) and **Paper** (handwritten notebook). Planned: Terminal and Display (see `docs/ROADMAP.md`).
+Built: **Editorial** (default), **Paper** (handwritten notebook) and **Terminal** (green screen). Planned: Display (see `docs/ROADMAP.md`).
 
 - **Editorial** is the default and must stay unchanged for anyone who doesn't switch.
-- `src/lib/views.ts` is the registry (id, label, hint, preview font, fonts to fetch, preload).
+- `src/lib/views.ts` is the registry (id, label, hint, preview font, fonts to fetch, preload, optional `secret` word that switches to the view when typed).
 - `Base.astro` sets `data-view` on `<html>` before paint: `?view=` first (and remembers it), then localStorage `view`, else the default. Every storage access is in try/catch. It also generates the `data-only` rules from the registry.
 - `src/styles/views/<id>.css` overrides the tokens under `:root[data-view="<id>"]` and `:root[data-view="<id>"][data-theme="dark"]`, including fonts (`--ff-sans`, `--ff-display`, `--ff-mono`, `--ff-code`) and `--grain`. Tailwind's `font-*` utilities read these.
 - `ViewSwitch.astro` (in the nav) lists the registry.
-- `data-only="<id>"` shows an element only in that view (e.g. the flow-field canvas is `editorial`, `PaperSketch` and `Scribble` are `paper`).
+- `data-only="<id>"` shows an element only in that view (e.g. the flow-field canvas is `editorial`, `PaperSketch` and `Scribble` are `paper`, `CodeRain` is `terminal`). `data-hide="<id> …"` hides an element in those views.
 - View-agnostic hook classes in components, styled per view: `ui-card`, `ui-pill`, `ui-btn`, `ui-index`, `ui-dot`, `ui-tape`, `ui-photo`, `doodle-underline`. Editorial doesn't style them.
 
 **Adding a view:** add an entry to `views.ts`, add `src/styles/views/<id>.css` and import it in `global.css`, add any hero decoration as a `data-only="<id>"` component. JS animations should pause when their view isn't showing (see the flow-field script in `Hero.astro`).
@@ -52,6 +52,12 @@ Built: **Editorial** (default) and **Paper** (handwritten notebook). Planned: Te
 - Page pattern is one token, `--page`: `--pattern-dots` (current), `--pattern-ruled`, `--pattern-grid` or `--pattern-plain`.
 - Margin-note wording is in `profile.json` → `paper.notes`. The hero sketch is `PaperSketch.astro`.
 - Dark theme = black paper with gel-pen inks. The band (`bg-band`) becomes kraft paper.
+
+**Terminal specifics** (`src/styles/views/terminal.css`):
+- VT323 for headings (one weight, sized up with `font-size-adjust`), JetBrains Mono for text. All corners square.
+- Dark = green screen with glow and scanlines; light = green-bar line-printer paper. Scanlines are one token, `--scanlines`.
+- Hero: `CodeRain.astro` (columns spell real stack tokens), a `whoami` prompt and a blinking cursor. Section eyebrows become `$ cat <section>.md` (`SectionHead.astro`). Tags render as `[tag]`.
+- Typing `matrix` anywhere switches to it.
 
 Guardrails for every view:
 - Readable contrast in light and dark (WCAG AA for text).

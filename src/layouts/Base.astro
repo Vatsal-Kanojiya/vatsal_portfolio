@@ -9,11 +9,12 @@ interface Props { title?: string; description?: string }
 const { title, description = profile.intro } = Astro.props;
 const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name} — ${profile.role}`;
 const ogImage = new URL('/og.png', Astro.site);
-// Elements marked data-only="<view>" show only in that view. Generated, so a new view needs no CSS for this.
+// data-only="<view>" shows an element only in that view; data-hide="<view> …" hides it in those views.
+// Generated, so a new view needs no CSS for this.
 const viewOnlyCss = views
   .map((v) => (v.id === defaultView
     ? `html[data-view]:not([data-view="${v.id}"]) [data-only="${v.id}"]`
-    : `html:not([data-view="${v.id}"]) [data-only="${v.id}"]`) + '{display:none}')
+    : `html:not([data-view="${v.id}"]) [data-only="${v.id}"]`) + `,html[data-view="${v.id}"] [data-hide~="${v.id}"]{display:none}`)
   .join('');
 const viewIds = views.map((v) => v.id);
 const preloads = Object.fromEntries(views.map((v) => [v.id, v.preload ?? []]));

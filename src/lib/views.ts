@@ -1,6 +1,7 @@
 // The switchable "views": same content, different atmosphere.
 // Adding a view = an entry here + a token file in src/styles/views/ (imported from global.css).
 import caveat from '@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2?url';
+import vt323 from '@fontsource/vt323/files/vt323-latin-400-normal.woff2?url';
 
 export interface View {
   id: string;
@@ -12,6 +13,8 @@ export interface View {
   fonts?: string[];
   /** Font files preloaded when a visitor lands in this view */
   preload?: string[];
+  /** Typing this word anywhere on the page switches to the view (an easter egg) */
+  secret?: string;
 }
 
 export const defaultView = 'editorial';
@@ -25,5 +28,14 @@ export const views: View[] = [
     previewFont: '"Caveat Variable", cursive',
     fonts: ['500 1em "Caveat Variable"', '700 1em "Caveat Variable"', '1em "Reenie Beanie"'],
     preload: [caveat],
+  },
+  {
+    id: 'terminal',
+    label: 'Terminal',
+    hint: 'Phosphor green on black.',
+    previewFont: '"VT323", monospace',
+    fonts: ['1em "VT323"', '400 1em "JetBrains Mono Variable"'],
+    preload: [vt323],
+    secret: 'matrix',
   },
 ];

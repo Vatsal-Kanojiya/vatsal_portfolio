@@ -4,6 +4,7 @@ import type { ImageMetadata } from 'astro';
 import profile from '../data/profile.json';
 import PaperSketch from './PaperSketch.astro';
 import Scribble from './Scribble.astro';
+import CodeRain from './CodeRain.astro';
 
 // Drop a file named portrait.(jpg|png|webp) into src/assets/photos/ and it appears here.
 const portraits = import.meta.glob<{ default: ImageMetadata }>('../assets/photos/portrait.{jpg,jpeg,png,webp}', { eager: true });
@@ -13,6 +14,7 @@ const [first, ...rest] = profile.name.split(' ');
 <section class="relative isolate flex min-h-[100svh] items-center overflow-hidden">
   <canvas id="flow" data-only="editorial" class="absolute inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
   <div data-only="editorial" class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_70%_45%,transparent_35%,var(--bg)_85%)]"></div>
+  <CodeRain />
 
   <div class="mx-auto grid w-full max-w-5xl items-center gap-12 px-6 pt-28 pb-20 md:grid-cols-[1.4fr_1fr]">
     <div>
@@ -20,10 +22,11 @@ const [first, ...rest] = profile.name.split(' ');
         <span class="relative flex size-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60"></span><span class="relative inline-flex size-2 rounded-full bg-accent"></span></span>
         {profile.openTo}
       </p>
+      <p data-only="terminal" class="mb-3 font-mono text-sm text-muted" aria-hidden="true"><span class="text-accent">vatsal@bengaluru</span>:~$ whoami</p>
       <div class="relative">
         <h1 class="font-display text-6xl leading-[.95] tracking-tight sm:text-7xl md:text-8xl" aria-label={profile.name}>
           <span class="name-line">{[...first].map((c, i) => <span style={`--i:${i}`}>{c}</span>)}</span><br />
-          <span class="name-line doodle-underline italic text-accent">{[...rest.join(' ')].map((c, i) => <span style={`--i:${i + first.length}`}>{c}</span>)}</span>
+          <span class="name-line doodle-underline italic text-accent">{[...rest.join(' ')].map((c, i) => <span style={`--i:${i + first.length}`}>{c}</span>)}</span><span data-only="terminal" class="term-cursor" aria-hidden="true"></span>
         </h1>
         <Scribble text={profile.paper.notes.hero} arrow="left" class="absolute top-0 left-[11.5rem] w-max sm:left-[14rem] md:left-[18.5rem]" />
       </div>

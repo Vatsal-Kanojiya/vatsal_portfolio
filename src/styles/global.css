@@ -5,8 +5,10 @@
 /* Font files only download when a view actually uses them */
 @import "@fontsource-variable/caveat";
 @import "@fontsource/reenie-beanie";
+@import "@fontsource/vt323";
 /* Views: each file overrides the tokens below under [data-view="<id>"] */
 @import "./views/paper.css";
+@import "./views/terminal.css";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 

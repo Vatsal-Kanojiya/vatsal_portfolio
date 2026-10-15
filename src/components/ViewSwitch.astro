@@ -61,4 +61,15 @@ import { views } from '../lib/views';
   options.forEach((o) => o.addEventListener('click', () => setView(o.dataset.setView!)));
   document.addEventListener('click', (e) => { if (!menu.hidden && !document.getElementById('view-switch')!.contains(e.target as Node)) open(false); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); } });
+
+  // Easter eggs: typing a view's secret word anywhere (outside form fields) switches to it
+  let typed = '';
+  document.addEventListener('keydown', (e) => {
+    const t = e.target as HTMLElement | null;
+    if (e.key.length !== 1 || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (t?.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t?.tagName ?? '')) return;
+    typed = (typed + e.key.toLowerCase()).slice(-16);
+    const hit = views.find((v) => v.secret && typed.endsWith(v.secret));
+    if (hit) { typed = ''; setView(hit.id); }
+  });
 </script>
