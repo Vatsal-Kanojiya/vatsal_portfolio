@@ -5,7 +5,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "playwright test"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,11 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "1.56.1",
     "typescript": "^6.0.3"
+  },
+  "overrides": {
+    "playwright-core": "1.56.1"
   }
 }

@@ -142,7 +142,7 @@ body::before {
   body { background: #fff !important; }
   body::before, body::after { display: none !important; }
   /* Content waiting for its scroll-reveal must still print */
-  .js [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .js [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
   section { min-height: 0 !important; padding-block: 1.5rem !important; }
   .ui-card, .ui-readout, article > header, li, dl > div { break-inside: avoid; }
   :is(h1, h2, h3) { break-after: avoid; }

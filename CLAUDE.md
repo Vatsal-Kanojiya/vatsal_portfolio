@@ -9,7 +9,10 @@ nvm use            # Node 24 (.nvmrc). The system default Node 18 is too old for
 npm install
 npm run dev        # http://localhost:4321
 npm run build      # must pass before every commit
+npm test           # Playwright e2e on the built site (build first): views, 390px layout, axe a11y, CSP
 ```
+
+`tests/` holds the e2e suite (`tests/serve.mjs` serves `dist/` like production, with a real 404). CI runs `astro check`, the build and the tests on every PR. When you add a view, add it to `VIEWS` in `tests/helpers.ts`; the a11y, layout and CSP checks then cover it automatically.
 
 ## Stack
 
