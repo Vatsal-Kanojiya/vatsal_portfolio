@@ -57,8 +57,9 @@ const steps = [
     <p class="font-mono text-xs uppercase tracking-[.2em] text-accent">Three years of growth</p>
     <h3 class="mt-3 font-display text-3xl tracking-tight sm:text-4xl">Where it started, <em class="text-accent">and where it is now.</em></h3>
   </div>
-  <ol class="relative mt-10 grid gap-6 sm:grid-cols-4">
-    <span class="absolute top-[7px] right-0 left-0 hidden h-px bg-gradient-to-r from-line via-accent/60 to-accent sm:block"></span>
+  <div class="relative mt-10">
+  <span class="absolute top-[7px] right-0 left-0 hidden h-px bg-gradient-to-r from-line via-accent/60 to-accent sm:block"></span>
+  <ol class="relative grid gap-6 sm:grid-cols-4">
     {steps.map((s, i) => (
       <li class="relative pl-6 sm:pl-0 sm:pt-8" data-reveal style={`--d:${i * 90}ms`}>
         <span class={`absolute top-1 left-0 size-[15px] rounded-full border-2 sm:top-0 ${i === steps.length - 1 ? 'border-accent bg-accent ring-4 ring-accent/20' : i >= 2 ? 'border-accent bg-accent' : 'border-muted bg-bg'}`}></span>
@@ -68,6 +69,7 @@ const steps = [
       </li>
     ))}
   </ol>
+  </div>
 
   <div class="mt-12 grid gap-4 sm:grid-cols-2">
     {early.map(({ data }, i) => (

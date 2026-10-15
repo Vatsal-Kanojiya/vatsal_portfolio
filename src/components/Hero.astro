@@ -14,7 +14,7 @@ const [first, ...rest] = profile.name.split(' ');
 
   <div class="mx-auto grid w-full max-w-5xl items-center gap-12 px-6 pt-28 pb-20 md:grid-cols-[1.4fr_1fr]">
     <div>
-      <p class="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 px-3 py-1 text-xs text-muted backdrop-blur" data-reveal>
+      <p class="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs text-muted" data-reveal>
         <span class="relative flex size-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60"></span><span class="relative inline-flex size-2 rounded-full bg-accent"></span></span>
         {profile.openTo}
       </p>
@@ -31,7 +31,7 @@ const [first, ...rest] = profile.name.split(' ');
         <a href="#projects" class="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition hover:bg-accent">
           See my projects <span class="transition group-hover:translate-x-1">→</span>
         </a>
-        <a href={profile.links.resume} download class="inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 px-6 py-3 text-sm font-medium backdrop-blur transition hover:border-accent hover:text-accent">
+        <a href={profile.links.resume} download class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-6 py-3 text-sm font-medium transition hover:border-accent hover:text-accent">
           Download résumé
         </a>
       </div>
@@ -51,10 +51,10 @@ const [first, ...rest] = profile.name.split(' ');
 </section>
 
 <style>
-  .name-line > span { display: inline-block; opacity: 0; transform: translateY(.35em) rotate(4deg); filter: blur(6px);
+  .name-line > span { display: inline-block; opacity: 0; transform: translateY(.35em) rotate(4deg);
     animation: letter-in 1s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--i) * 45ms + 150ms); }
-  @keyframes letter-in { to { opacity: 1; transform: none; filter: none; } }
-  @media (prefers-reduced-motion: reduce) { .name-line > span { animation: none; opacity: 1; transform: none; filter: none; } }
+  @keyframes letter-in { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .name-line > span { animation: none; opacity: 1; transform: none; } }
 </style>
 
 <script>
@@ -79,8 +79,8 @@ const [first, ...rest] = profile.name.split(' ');
 
     const spawn = () => ({ x: Math.random() * w, y: Math.random() * h, age: 0, life: 120 + Math.random() * 220 });
     const resize = () => {
-      dpr = Math.min(devicePixelRatio || 1, 2);
       w = canvas.clientWidth; h = canvas.clientHeight;
+      dpr = Math.min(devicePixelRatio || 1, w < 768 ? 1.5 : 2);
       canvas.width = w * dpr; canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const n = Math.min(420, Math.floor((w * h) / 4200));
@@ -119,14 +119,19 @@ const [first, ...rest] = profile.name.split(' ');
 
     resize();
     if (reduce) for (let i = 0; i < 220; i++) step(); // one still frame
-    else start();
+    else {
+      // Start once the page has settled, so the animation never competes with first render
+      const go = () => ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 2000 }) : setTimeout(start, 600));
+      document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true });
+    }
 
     addEventListener('resize', () => { resize(); if (reduce) for (let i = 0; i < 220; i++) step(); });
     canvas.parentElement?.addEventListener('pointermove', (e) => {
       const r = canvas.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
     });
     canvas.parentElement?.addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
-    new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop())).observe(canvas);
+    let ready = false;
+    new IntersectionObserver(([e]) => { if (!ready) { ready = true; return; } e.isIntersecting ? start() : stop(); }).observe(canvas);
     document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
     new MutationObserver(() => { color = accent(); ctx.clearRect(0, 0, w, h); })
       .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
