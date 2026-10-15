@@ -6,7 +6,7 @@ import ProjectVisual from '../../components/ProjectVisual.astro';
 import { visible } from '../../lib/site';
 
 export async function getStaticPaths() {
-  const projects = (await getCollection('projects', visible)).sort((a, b) => a.data.order - b.data.order);
+  const projects = (await getCollection('projects', (p) => visible(p) && p.data.kind === 'showcase')).sort((a, b) => a.data.order - b.data.order);
   return projects.map((p, i) => ({ params: { slug: p.id }, props: { project: p, next: projects[(i + 1) % projects.length], index: i } }));
 }
 
@@ -21,7 +21,9 @@ const { Content } = await render(project);
     <header class="mt-10">
       <h1 class="font-display text-5xl leading-[1.02] tracking-tight sm:text-7xl" data-reveal>{data.title}</h1>
       <p class="mt-5 max-w-2xl font-display text-2xl italic text-accent" data-reveal style="--d:80ms">{data.tagline}</p>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted" data-reveal style="--d:120ms">{data.summary}</p>
       <ul class="mt-8 flex flex-wrap gap-1.5" data-reveal style="--d:160ms">
+        {data.platforms.map((p) => <li class="rounded-full bg-accent px-3 py-1 font-mono text-xs text-bg">{p}</li>)}
         {data.stack.map((s) => <li class="rounded-full border border-line px-3 py-1 font-mono text-xs text-muted">{s}</li>)}
       </ul>
       <div class="mt-8 flex flex-wrap gap-3" data-reveal style="--d:240ms">
@@ -49,7 +51,21 @@ const { Content } = await render(project);
       </dl>
     )}
 
-    <div class="prose mt-8 max-w-2xl"><Content /></div>
+    {data.features.length > 0 && (
+      <section class="mt-20">
+        <h2 class="font-display text-4xl tracking-tight" data-reveal>What it does</h2>
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {data.features.map((f, i) => (
+            <div class="rounded-2xl border border-line bg-surface p-6" data-reveal style={`--d:${(i % 3) * 70}ms`}>
+              <h3 class="font-medium tracking-tight text-accent">{f.title}</h3>
+              <p class="mt-2 text-[15px] leading-relaxed text-muted">{f.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <div class="prose mt-16 max-w-2xl"><Content /></div>
 
     {data.gallery.length > 0 && (
       <section class="mt-16">

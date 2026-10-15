@@ -1,45 +1,35 @@
 ---
 title: Super Notes
-tagline: Ask your notes a question. Get an answer with citations.
-summary: A synced notes app with RAG built in. Hybrid retrieval, multi-device sync with optimistic locking, and metered LLM features that never double-charge a retry.
-stack: [Django, DRF, PostgreSQL, pgvector, Celery, Redis, Vue 3]
+tagline: Notes that answer back.
+summary: A notes app you can talk to. Ask a question in plain language and get an answer written from your own notes, with links to the exact notes it came from. Synced across web and Android.
+kind: showcase
+year: "2026"
+platforms: [Web, Android]
+stack: [Django, DRF, PostgreSQL, pgvector, Celery, Redis, Vue 3, Flutter]
 order: 1
 status: in-progress
 repo: https://github.com/Vatsal-Kanojiya/super_notes
 highlights:
-  - { value: "Hybrid", label: "vector + full-text retrieval, fused by RRF" }
-  - { value: "409", label: "conflict on stale edits, never silent overwrite" }
-  - { value: "0", label: "double charges on retried LLM calls" }
+  - { value: "1,500+", label: "automated backend tests" }
+  - { value: "36", label: "API endpoints, one documented contract" }
+  - { value: "290+", label: "design decisions written down" }
+features:
+  - { title: "Ask your notes", text: "Ask anything in plain language. The answer comes only from your notes, with sources you can click to check." }
+  - { title: "Real conversations", text: "Follow-up questions just work. It remembers what you were talking about." }
+  - { title: "Answers that stream in", text: "Replies appear word by word as they're written. No staring at a spinner." }
+  - { title: "Memory you control", text: "It learns small facts about you from chats. You can see every one, and delete any." }
+  - { title: "Format my note", text: "One tap turns a messy note into a tidy one. You preview the change and accept or reject it." }
+  - { title: "Reminders and calendar", text: "Put a due date on a note and get heads-ups by email and push in the days before, plus a calendar view." }
+  - { title: "Files that are searchable", text: "Attach images and PDFs. Their text is read, made searchable and summarised." }
+  - { title: "Sync without lost edits", text: "Write on the web, continue on your phone. If two devices edit at once, nothing is silently overwritten." }
+  - { title: "Private by design", text: "Google sign-in, at most two devices per account, and every query is limited to your own notes." }
 ---
 
-## The problem
+## Under the hood, briefly
 
-Notes are easy to write and hard to use later. Super Notes lets you ask a question in plain language and answers it **from your own notes**, citing the notes it used, so you can check every answer.
+- **Finding the right notes.** Search combines *meaning* (vector similarity) with *exact words* (full-text search), then merges both rankings. Retrieval quality is measured with a labelled question set rather than judged by eye.
+- **Slow work runs in the background.** Reading files, indexing notes and writing answers happen in background jobs, so the app stays fast.
+- **Safe usage limits.** Every AI feature goes through one limits layer. Monthly quotas per user and system-wide caps are editable without a deploy, and a retried request is never counted twice.
+- **Built in versions.** V1 covered notes, sync, search and Ask. V2 added conversations, streaming, memory, formatting, reminders and attachments. V3 is the Flutter Android app.
 
-It's also a multi-device app, which brings the classic sync problem: two devices editing the same note.
-
-## Retrieval: two signals, one ranking
-
-Pure vector search misses exact terms like names, codes and acronyms. Pure keyword search misses meaning. Super Notes uses both:
-
-- **pgvector HNSW** similarity search for semantic matches
-- **Postgres full-text search** for exact terms
-- The two ranked lists are merged with **reciprocal rank fusion**
-
-Results are **filtered to the owner in SQL**, inside the query rather than afterwards in Python, so another user's note can never leak into an answer. A management command reports **recall@5 and MRR**, so retrieval changes are measured, not guessed.
-
-## Sync without lost edits
-
-Each user has a revision counter, issued under a `select_for_update` row lock. Devices sync deltas since their last revision. If a device edits a stale copy, the server answers **409 Conflict** with its current version. Nothing is silently overwritten.
-
-## Metering LLM usage safely
-
-All LLM features go through one limits layer:
-
-- **Per-user quotas** enforced under row locks
-- **System-wide caps** under Postgres advisory locks
-- **Idempotency-Key** replay, so a retried request returns the original result and is never charged twice
-
-## How it was built
-
-Built with Claude Code agents under a spec-first workflow. I wrote the specs and reviewed every diff.
+Built with Claude Code agents under a spec-first workflow: I wrote the plans and acceptance criteria, and reviewed every diff.
