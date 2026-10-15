@@ -31,6 +31,7 @@
   --warm: #b8692f;
   --band: #1d1c1a;
   --band-ink: #f1ede5;
+  --band-accent: #c97c42; /* --warm, lightened to stay readable on the dark band */
   color-scheme: light;
 }
 [data-theme="dark"] {
@@ -44,6 +45,7 @@
   --warm: #e2a46c;
   --band: #17201e;
   --band-ink: #e8e5de;
+  --band-accent: #e2a46c;
   color-scheme: dark;
 }
 
@@ -75,6 +77,11 @@ body {
   transition: background-color .4s ease, color .4s ease;
 }
 ::selection { background: var(--accent); color: var(--bg); }
+/* On the band, the warm accent switches to a tone tuned for the band's own background */
+.bg-band { --warm: var(--band-accent); }
+/* One clear keyboard focus ring everywhere, in the current view's accent (mouse clicks don't show it) */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.bg-band :focus-visible { outline-color: var(--band-ink); }
 
 /* Paper grain — gives the calm, tactile feel */
 body::before {

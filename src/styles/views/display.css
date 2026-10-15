@@ -101,7 +101,6 @@
 [data-view="display"] .ui-readout { padding: 1rem 1.1rem; margin: 0 .35rem; border-radius: .5rem; background: var(--surface); box-shadow: var(--bezel); }
 
 /* The dark band becomes a vacuum-fluorescent panel */
-[data-view="display"] .bg-band { --warm: var(--band-accent); }
 
 /* ---- Hero clock ---- */
 .lcd-panel { box-shadow: var(--bezel); }

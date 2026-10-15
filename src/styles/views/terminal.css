@@ -29,6 +29,7 @@
   --warm: #8f5400;
   --band: #08110a;
   --band-ink: #9ff2b0;
+  --band-accent: #ffb000;
   --grain: .03;
   --glow: none;
   --scanlines: repeating-linear-gradient(to bottom, transparent 0 2.6rem, color-mix(in oklab, var(--accent) 4%, transparent) 2.6rem 5.2rem);
@@ -47,6 +48,7 @@
   --warm: #ffb000;
   --band: #0b1a0f;
   --band-ink: #a8f5b6;
+  --band-accent: #ffb000;
   --grain: .05;
   --glow: 0 0 .35em color-mix(in oklab, var(--accent) 55%, transparent);
   --scanlines: repeating-linear-gradient(to bottom, transparent 0 2px, rgb(0 0 0 / .28) 2px 3px);

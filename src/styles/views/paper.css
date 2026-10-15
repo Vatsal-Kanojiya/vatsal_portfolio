@@ -173,7 +173,6 @@
 
 /* ---- Sections ---- */
 /* The dark band becomes a kraft-paper divider page */
-[data-view="paper"] .bg-band { --warm: var(--band-accent); }
 [data-view="paper"] .bg-band > div { --muted: color-mix(in oklab, var(--band-ink) 82%, var(--band)); }
 [data-view="paper"] .bg-band .opacity-70 { opacity: .9; }
 
