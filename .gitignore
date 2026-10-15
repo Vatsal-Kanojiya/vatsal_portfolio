@@ -13,3 +13,5 @@ tools/handfont/out/
 __pycache__/
 
 deploy/.env
+!.env.example
+!deploy/.env.example
