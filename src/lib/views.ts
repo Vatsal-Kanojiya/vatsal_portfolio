@@ -17,7 +17,7 @@ export interface View {
 export const defaultView = 'editorial';
 
 export const views: View[] = [
-  { id: 'editorial', label: 'Editorial', hint: 'Clean and modern. The default.' },
+  { id: 'editorial', label: 'Editorial', hint: 'Clean and modern. The default.', previewFont: '"Fraunces Variable", Georgia, serif' },
   {
     id: 'paper',
     label: 'Paper',

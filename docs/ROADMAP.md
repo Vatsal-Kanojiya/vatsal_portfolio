@@ -18,7 +18,7 @@ Upgrade the 2023 VBlog into a fourth showcase project, so the line-up covers a u
 
 ## Later: switchable "views"
 
-One site, same content, several complete atmospheres (fonts, colours, hero animation, details). A small switch in the nav changes the view. The choice is remembered per visitor, and `?view=<name>` gives a shareable link.
+One site, same content, several complete atmospheres (fonts, colours, hero animation, details). A small switch in the nav changes the view (built: see **Views** in `CLAUDE.md` for how to add one). The choice is remembered per visitor, and `?view=<name>` gives a shareable link.
 
 **Rules for every view**
 - **Editorial** is always the default. Every other view is opt-in.
@@ -31,7 +31,7 @@ One site, same content, several complete atmospheres (fonts, colours, hero anima
 | **Editorial** | ✅ built (current site) | Professional and modern. Fraunces serif + Inter, warm off-white / forest-ink themes, flow-field streamlines in the hero. |
 | **Terminal** | 💡 planned | Matrix / cyberpunk terminal. VT323 headings, JetBrains Mono body, phosphor green on black, scanlines and glow, blinking cursor, section titles like `$ cat journey.md`. Hero "code rain" built from the real stack (`SELECT`, `select_for_update`, `@shared_task`, `409`, …). Easter egg: typing `matrix` switches to this view. |
 | **Display** | 💡 planned | LED / LCD segment displays. DSEG 7/14-segment font for headings and numbers, with faint "ghost 8s" behind digits. Hero: a big live IST clock. Stats as LCD readouts. Light = calculator LCD, dark = amber train-board LED. |
-| **Paper** | 💡 planned (most personal) | A handwritten notebook. Paper texture (ruled or dotted page, slight grain, maybe margin notes and doodled underlines). **Fonts chosen:** Caveat (text and headings, 400–700) + Reenie Beanie (short margin scribbles and annotations only). The custom handwriting font is parked; see below. |
+| **Paper** | ✅ built (v1) | A handwritten notebook. Dotted page with grain (ruled, graph and plain are one token away), blue-black ink, red pen, highlighter tags, taped cards, doodled underlines, margin notes, kraft-paper band, and a hand-sketched stack diagram that draws itself in the hero. Dark = black paper with gel pens. Caveat (text and headings) + Reenie Beanie (short margin scribbles only). The custom handwriting font is parked; see below. |
 
 ## Parked: Vatsal's own handwriting font
 

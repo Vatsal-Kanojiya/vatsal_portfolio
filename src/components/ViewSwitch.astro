@@ -19,7 +19,7 @@ import { views } from '../lib/views';
           <button type="button" data-set-view={v.id} aria-pressed="false"
             class="group flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2 text-left transition hover:bg-accent-soft aria-pressed:bg-accent-soft">
             <span>
-              <span class="block text-[15px] text-ink" style={v.previewFont && `font-family:${v.previewFont};font-size:1.3em;line-height:1.1`}>{v.label}</span>
+              <span class="block text-[15px] text-ink" style={v.previewFont && `font-family:${v.previewFont};font-size:1.15em;font-size-adjust:ex-height .5;line-height:1.2`}>{v.label}</span>
               <span class="block text-xs text-muted">{v.hint}</span>
             </span>
             <span class="text-accent opacity-0 group-aria-pressed:opacity-100" aria-hidden="true">✓</span>
