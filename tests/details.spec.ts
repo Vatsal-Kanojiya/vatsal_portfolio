@@ -64,6 +64,28 @@ test('the journey line fills with scroll', async ({ page }) => {
   expect(await fillAt(1.2)).toBeCloseTo(1, 1);
 });
 
+test('"increase contrast" strengthens secondary text in every view', async ({ page }) => {
+  await page.goto('/');
+  const ratio = () => page.evaluate(() => {
+    // Paint the colour to read it back as sRGB, whatever notation the browser uses (rgb, oklab, …)
+    const ctx = document.createElement('canvas').getContext('2d', { willReadFrequently: true })!;
+    const rgb = (c: string) => { ctx.clearRect(0, 0, 1, 1); ctx.fillStyle = c; ctx.fillRect(0, 0, 1, 1); return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3); };
+    const lum = (c: string) => { const [r, g, b] = rgb(c).map((v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+    const probe = document.createElement('span'); probe.className = 'text-muted bg-bg'; document.body.append(probe);
+    const s = getComputedStyle(probe), a = lum(s.color), b = lum(s.backgroundColor); probe.remove();
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  });
+  for (const view of ['editorial', 'paper', 'terminal', 'display']) {
+    await page.evaluate((v) => { document.documentElement.dataset.view = v; }, view);
+    await page.emulateMedia({ contrast: 'no-preference' });
+    const normal = await ratio();
+    await page.emulateMedia({ contrast: 'more' });
+    const more = await ratio();
+    expect.soft(more, view).toBeGreaterThan(normal);
+    expect.soft(more, view).toBeGreaterThanOrEqual(7);
+  }
+});
+
 test('print: content is visible and decorations are hidden', async ({ page }) => {
   await page.goto('/');
   await page.emulateMedia({ media: 'print' });

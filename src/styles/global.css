@@ -125,6 +125,17 @@ body::before {
 }
 .prose a { color: var(--accent); text-underline-offset: 3px; }
 
+/* Visitors who ask their system for more contrast get stronger secondary text and lines, and no textures */
+@media (prefers-contrast: more) {
+  :root, :root[data-view], :root[data-view][data-theme] {
+    --muted: color-mix(in oklab, var(--ink) 82%, var(--bg)) !important;
+    --line: color-mix(in oklab, var(--ink) 45%, var(--bg)) !important;
+    --grain: 0 !important; --scanlines: none !important; --page: none !important;
+  }
+  .bg-band > div { --muted: color-mix(in oklab, var(--band-ink) 90%, var(--band)) !important; }
+  .bg-band .opacity-70 { opacity: 1; }
+}
+
 /* Typography: balanced headings, no stranded last words in paragraphs */
 :is(h1, h2, h3, h4) { text-wrap: balance; }
 :is(p, li, dd, figcaption) { text-wrap: pretty; }
