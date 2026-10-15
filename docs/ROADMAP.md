@@ -9,6 +9,13 @@ Ideas are logged here so they aren't lost. The current focus is **content and de
 - [ ] Decide domain + server, then deploy the portfolio
 - [ ] Deploy Django apps on subdomains (`notes.<domain>`, `expense.<domain>`) and link them via `live:` in each project file
 
+## Later: VBlog v2, the public-facing project
+
+Upgrade the 2023 VBlog into a fourth showcase project, so the line-up covers a utility app (Expense Tracker), an AI app (Super Notes) and a public-facing publishing app.
+- Rich-text editor (reuse the TipTap work from Super Notes), code snippets with syntax highlighting, proper tags
+- Image uploads and handling (covers, inline images): this is where media matters most
+- Keep the social layer (follows, likes, comments, saves) and the Razorpay VIP plan, rebuilt to current standards
+
 ## Later: switchable "views"
 
 One site, same content, several complete atmospheres (fonts, colours, hero animation, details). A small switch in the nav changes the view. The choice is remembered per visitor, and `?view=<name>` gives a shareable link.
@@ -24,9 +31,11 @@ One site, same content, several complete atmospheres (fonts, colours, hero anima
 | **Editorial** | ✅ built (current site) | Professional and modern. Fraunces serif + Inter, warm off-white / forest-ink themes, flow-field streamlines in the hero. |
 | **Terminal** | 💡 planned | Matrix / cyberpunk terminal. VT323 headings, JetBrains Mono body, phosphor green on black, scanlines and glow, blinking cursor, section titles like `$ cat journey.md`. Hero "code rain" built from the real stack (`SELECT`, `select_for_update`, `@shared_task`, `409`, …). Easter egg: typing `matrix` switches to this view. |
 | **Display** | 💡 planned | LED / LCD segment displays. DSEG 7/14-segment font for headings and numbers, with faint "ghost 8s" behind digits. Hero: a big live IST clock. Stats as LCD readouts. Light = calculator LCD, dark = amber train-board LED. |
-| **Paper** | 💡 planned (most personal) | A handwritten notebook. Paper texture (ruled or dotted page, slight grain, maybe margin notes and doodled underlines). Text set in **Vatsal's own handwriting font**: individual hand-printed characters, not cursive. The message: built my own way, down to the letters. |
+| **Paper** | 💡 planned (most personal) | A handwritten notebook. Paper texture (ruled or dotted page, slight grain, maybe margin notes and doodled underlines). **Fonts chosen:** Caveat (text and headings, 400–700) + Reenie Beanie (short margin scribbles and annotations only). The custom handwriting font is parked; see below. |
 
-## Later: Vatsal's handwriting font (for the Paper view)
+## Parked: Vatsal's own handwriting font
+
+> v1 was built from tablet writing (`tools/handfont/`) but didn't look good enough. Caveat + Reenie Beanie are used instead. Revisit only with better input and time for kerning.
 
 Goal: a real web font generated from Vatsal's handwriting, so the Paper view reads as if he wrote it.
 
