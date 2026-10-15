@@ -15,10 +15,19 @@ const links = [
       Building something that has to <em class="text-accent">just work?</em>
     </h2>
     <p class="mx-auto mt-6 max-w-lg text-lg text-muted" data-reveal style="--d:160ms">{profile.openTo} I reply to every message.</p>
-    <a href={`mailto:${profile.email}`} class="ui-pill ui-btn mt-10 inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 font-medium text-bg transition hover:bg-accent" data-reveal style="--d:240ms">
-      Say hello →
-    </a>
-    <Scribble text={profile.paper.notes.contact} arrow="left" class="ml-3 align-bottom" />
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-3" data-reveal style="--d:240ms">
+      <a href={`mailto:${profile.email}`} class="ui-pill ui-btn inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 font-medium text-bg transition hover:bg-accent">
+        Say hello →
+      </a>
+      <!-- Many people would rather paste the address into their own mail tool. Needs JS, so hidden without it. -->
+      <button type="button" id="copy-email" data-email={profile.email}
+        class="ui-pill hidden items-center gap-2 rounded-full border border-line bg-bg px-6 py-4 text-sm font-medium transition hover:border-accent hover:text-accent [.js_&]:inline-flex">
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <span data-label>Copy email</span>
+      </button>
+      <Scribble text={profile.paper.notes.contact} arrow="left" class="align-bottom" />
+    </div>
+    <span id="copy-status" class="sr-only" aria-live="polite"></span>
     <ul class="ui-card mx-auto mt-16 grid max-w-3xl gap-px overflow-hidden rounded-2xl border border-line bg-line text-left sm:grid-cols-2 md:grid-cols-5" data-reveal style="--d:320ms">
       {links.map((l, i) => (
         <li class={i === 0 ? 'md:col-span-2' : ''}>
@@ -32,3 +41,20 @@ const links = [
     </ul>
   </div>
 </section>
+
+<script>
+  const btn = document.getElementById('copy-email');
+  const status = document.getElementById('copy-status');
+  const label = btn?.querySelector('[data-label]');
+  let timer = 0;
+  btn?.addEventListener('click', async () => {
+    const email = btn.dataset.email ?? '';
+    let ok = false;
+    // If the clipboard isn't available, the button shows the address so it can be copied by hand
+    try { await navigator.clipboard.writeText(email); ok = true; } catch {}
+    if (label) label.textContent = ok ? 'Copied ✓' : email;
+    if (status) status.textContent = ok ? 'Email address copied' : `Email: ${email}`;
+    clearTimeout(timer);
+    timer = window.setTimeout(() => { if (label) label.textContent = 'Copy email'; if (status) status.textContent = ''; }, 2200);
+  });
+</script>

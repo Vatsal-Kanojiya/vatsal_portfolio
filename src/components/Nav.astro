@@ -14,7 +14,7 @@ const links = [
     <div class="flex items-center gap-1 sm:gap-2">
       <ul class="hidden items-center gap-1 sm:flex">
         {links.map((l) => (
-          <li><a href={l.href} class="rounded-full px-3 py-1.5 text-sm text-muted transition hover:bg-accent-soft hover:text-ink">{l.label}</a></li>
+          <li><a href={l.href} data-section={l.href.split('#')[1]} class="rounded-full px-3 py-1.5 text-sm text-muted transition hover:bg-accent-soft hover:text-ink aria-[current=true]:text-ink aria-[current=true]:bg-accent-soft/70">{l.label}</a></li>
         ))}
       </ul>
       <ViewSwitch />
@@ -22,3 +22,18 @@ const links = [
     </div>
   </nav>
 </header>
+
+<script>
+  // On the home page, mark the nav link for the section in the middle of the screen
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('nav a[data-section]')];
+  const sections = links.map((a) => document.getElementById(a.dataset.section!)).filter((s): s is HTMLElement => !!s);
+  if (sections.length) {
+    const visible = new Set<string>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) e.isIntersecting ? visible.add(e.target.id) : visible.delete(e.target.id);
+      const current = sections.find((s) => visible.has(s.id))?.id;
+      links.forEach((a) => (a.dataset.section === current ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach((s) => io.observe(s));
+  }
+</script>

@@ -82,10 +82,26 @@ const person = {
     <main id="main"><slot /></main>
     <Footer />
     <script>
+      import { email } from '../data/profile.json';
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
       }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
       document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+
+      // Mobile browser chrome takes the page colour of the current view and theme
+      const root = document.documentElement;
+      const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+      const syncChrome = () => { const bg = getComputedStyle(root).getPropertyValue('--bg').trim(); if (meta && bg) meta.content = bg; };
+      syncChrome();
+      new MutationObserver(syncChrome).observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-view'] });
+
+      // A hello for anyone who opens the dev tools
+      const accent = getComputedStyle(root).getPropertyValue('--accent').trim();
+      console.log(
+        `%cHi, fellow engineer 👋%c\n\nThis site is static Astro: no client framework, just HTML, CSS and a few small scripts.\nIt has four looks over the same content: try ?view=paper, ?view=terminal or ?view=display (or type "matrix").\n\nSay hello: ${email}`,
+        `font: 600 16px/1.6 system-ui, sans-serif; color: ${accent || '#2c6b5e'};`,
+        'font: 13px/1.6 system-ui, sans-serif;',
+      );
     </script>
   </body>
 </html>
