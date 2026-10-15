@@ -56,4 +56,4 @@ Guardrails for every view:
 
 ## Git
 
-Small, focused commits with descriptive messages. Never commit `tools/handfont/scans/` or `out/` (they hold raw handwriting and are git-ignored).
+Other Claude Code sessions work on this repo in parallel. `git pull` before starting, then commit **and push** each finished, build-passing step so everyone sees the current state. Small, focused commits with descriptive messages. Never commit `tools/handfont/scans/` or `out/` (they hold raw handwriting and are git-ignored).
