@@ -38,6 +38,10 @@ const person = {
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="me" href={profile.links.github} />
+    <link rel="me" href={profile.links.linkedin} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
