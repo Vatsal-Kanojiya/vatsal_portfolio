@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import ProjectVisual from '../../components/ProjectVisual.astro';
 import { visible, ghost } from '../../lib/site';
+import profile from '../../data/profile.json';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects', (p) => visible(p) && p.data.kind === 'showcase')).sort((a, b) => a.data.order - b.data.order);
@@ -16,8 +17,32 @@ const { Content } = await render(project);
 // Reading time from everything on the page a reader would read (~220 words per minute)
 const words = [project.body ?? '', data.summary, ...data.features.flatMap((f) => [f.title, f.text])].join(' ').split(/\s+/).filter(Boolean).length;
 const minutes = Math.max(1, Math.round(words / 220));
+// Search engines: describe the project as software, with a breadcrumb back to the projects list
+const pageUrl = new URL(`/projects/${project.id}/`, Astro.site).href;
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': data.repo ? 'SoftwareSourceCode' : 'CreativeWork',
+    name: data.title,
+    description: data.summary,
+    url: pageUrl,
+    ...(data.repo && { codeRepository: data.repo }),
+    ...(data.live && { sameAs: data.live }),
+    keywords: [...data.platforms, ...data.stack].join(', '),
+    author: { '@type': 'Person', name: profile.name, url: Astro.site?.href },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href },
+      { '@type': 'ListItem', position: 2, name: 'Projects', item: new URL('/#projects', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: data.title, item: pageUrl },
+    ],
+  },
+];
 ---
-<Base title={data.title} description={data.summary}>
+<Base title={data.title} description={data.summary} structuredData={structuredData}>
   <article class="mx-auto max-w-4xl px-6 pt-32 pb-20">
     <div class="flex items-baseline justify-between gap-4 font-mono text-xs uppercase tracking-[.2em] text-muted">
       <a href="/#projects" class="transition hover:text-accent print:hidden">← All projects</a>

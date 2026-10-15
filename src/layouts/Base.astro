@@ -5,8 +5,8 @@ import Footer from '../components/Footer.astro';
 import profile from '../data/profile.json';
 import { views, defaultView } from '../lib/views';
 
-interface Props { title?: string; description?: string }
-const { title, description = profile.intro } = Astro.props;
+interface Props { title?: string; description?: string; /** Extra schema.org objects for this page */ structuredData?: object[] }
+const { title, description = profile.intro, structuredData = [] } = Astro.props;
 const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name} — ${profile.role}`;
 const ogImage = new URL('/og.png', Astro.site);
 // data-only="<view>" shows an element only in that view; data-hide="<view> …" hides it in those views.
@@ -52,6 +52,7 @@ const person = {
     <meta name="twitter:image" content={ogImage} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    {structuredData.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
     <meta name="theme-color" content="#f5f2ec" />
     <style is:inline set:html={viewOnlyCss}></style>
     <script is:inline define:vars={{ viewIds, defaultView, preloads }}>
