@@ -5,3 +5,9 @@ dist/
 .env.*
 .DS_Store
 .vercel/
+
+# handwriting font: tool env + raw scans stay local
+tools/handfont/.venv/
+tools/handfont/scans/
+tools/handfont/out/
+__pycache__/
