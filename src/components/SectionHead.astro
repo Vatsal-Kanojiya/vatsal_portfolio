@@ -1,10 +1,12 @@
 ---
-interface Props { index: string; eyebrow: string; title: string; lead?: string }
-const { index, eyebrow, title, lead } = Astro.props;
+import Scribble from './Scribble.astro';
+interface Props { index: string; eyebrow: string; title: string; lead?: string; note?: string }
+const { index, eyebrow, title, lead, note } = Astro.props;
 ---
 <div class="mb-12 max-w-2xl" data-reveal>
-  <p class="mb-4 flex items-center gap-3 font-mono text-xs uppercase tracking-[.2em] text-accent">
-    <span>{index}</span><span class="h-px w-8 bg-accent/50"></span><span>{eyebrow}</span>
+  <p class="mb-4 flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[.2em] text-accent">
+    <span class="ui-index">{index}</span><span class="h-px w-8 bg-accent/50"></span><span>{eyebrow}</span>
+    <Scribble text={note} class="ml-3" />
   </p>
   <h2 class="font-display text-4xl leading-[1.1] tracking-tight sm:text-5xl" set:html={title} />
   {lead && <p class="mt-5 text-lg leading-relaxed text-muted">{lead}</p>}

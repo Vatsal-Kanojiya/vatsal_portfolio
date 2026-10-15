@@ -23,13 +23,13 @@ const roles = (await getCollection('experience', visible)).sort((a, b) => a.data
           {data.intro && <p class="mb-8 max-w-2xl text-lg leading-relaxed" data-reveal>{data.intro}</p>}
           <div class="grid gap-4 sm:grid-cols-2">
             {data.highlights.map((h, i) => (
-              <div class="group rounded-2xl border border-line bg-bg p-6 transition duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_20px_40px_-24px_var(--accent)]"
+              <div class="ui-card ui-tape group rounded-2xl border border-line bg-bg p-6 transition duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_20px_40px_-24px_var(--accent)]"
                 data-reveal style={`--d:${(i % 2) * 90}ms`}>
                 <h4 class="font-medium tracking-tight transition group-hover:text-accent">{h.title}</h4>
                 <p class="mt-2 text-[15px] leading-relaxed text-muted">{h.text}</p>
                 {h.tags.length > 0 && (
                   <ul class="mt-4 flex flex-wrap gap-1.5">
-                    {h.tags.map((t) => <li class="rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] text-accent">{t}</li>)}
+                    {h.tags.map((t) => <li class="ui-pill rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] text-accent">{t}</li>)}
                   </ul>
                 )}
               </div>

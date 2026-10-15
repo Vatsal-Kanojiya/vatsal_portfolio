@@ -1,5 +1,6 @@
 ---
 import profile from '../data/profile.json';
+import Scribble from './Scribble.astro';
 const links = [
   { label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
   { label: 'LinkedIn', value: 'vatsal-kanojiya', href: profile.links.linkedin },
@@ -14,10 +15,11 @@ const links = [
       Building something that has to <em class="text-accent">just work?</em>
     </h2>
     <p class="mx-auto mt-6 max-w-lg text-lg text-muted" data-reveal style="--d:160ms">{profile.openTo} I reply to every message.</p>
-    <a href={`mailto:${profile.email}`} class="mt-10 inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 font-medium text-bg transition hover:bg-accent" data-reveal style="--d:240ms">
+    <a href={`mailto:${profile.email}`} class="ui-pill ui-btn mt-10 inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 font-medium text-bg transition hover:bg-accent" data-reveal style="--d:240ms">
       Say hello →
     </a>
-    <ul class="mx-auto mt-16 grid max-w-3xl gap-px overflow-hidden rounded-2xl border border-line bg-line text-left sm:grid-cols-2 md:grid-cols-5" data-reveal style="--d:320ms">
+    <Scribble text={profile.paper.notes.contact} arrow="left" class="ml-3 align-bottom" />
+    <ul class="ui-card mx-auto mt-16 grid max-w-3xl gap-px overflow-hidden rounded-2xl border border-line bg-line text-left sm:grid-cols-2 md:grid-cols-5" data-reveal style="--d:320ms">
       {links.map((l, i) => (
         <li class={i === 0 ? 'md:col-span-2' : ''}>
           <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener" download={l.label === 'Résumé' ? '' : undefined}

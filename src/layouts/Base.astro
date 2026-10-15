@@ -3,11 +3,20 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import profile from '../data/profile.json';
+import { views, defaultView } from '../lib/views';
 
 interface Props { title?: string; description?: string }
 const { title, description = profile.intro } = Astro.props;
 const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name} — ${profile.role}`;
 const ogImage = new URL('/og.png', Astro.site);
+// Elements marked data-only="<view>" show only in that view. Generated, so a new view needs no CSS for this.
+const viewOnlyCss = views
+  .map((v) => (v.id === defaultView
+    ? `html[data-view]:not([data-view="${v.id}"]) [data-only="${v.id}"]`
+    : `html:not([data-view="${v.id}"]) [data-only="${v.id}"]`) + '{display:none}')
+  .join('');
+const viewIds = views.map((v) => v.id);
+const preloads = Object.fromEntries(views.map((v) => [v.id, v.preload ?? []]));
 const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -43,13 +52,25 @@ const person = {
     <link rel="sitemap" href="/sitemap-index.xml" />
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
     <meta name="theme-color" content="#f5f2ec" />
-    <script is:inline>
-      // Set theme + JS flag before paint to avoid a flash
+    <style is:inline set:html={viewOnlyCss}></style>
+    <script is:inline define:vars={{ viewIds, defaultView, preloads }}>
+      // Set theme, view + JS flag before paint to avoid a flash
       (function () {
-        var d = document.documentElement, t = null;
+        var d = document.documentElement, t = null, v = null;
         try { t = localStorage.getItem('theme'); } catch (e) {}
         if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         d.dataset.theme = t;
+        // View: ?view= (shareable link) wins and is remembered, then the saved choice, else the default
+        try { v = new URLSearchParams(location.search).get('view'); } catch (e) {}
+        if (viewIds.indexOf(v) > -1) { try { localStorage.setItem('view', v); } catch (e) {} }
+        else { v = null; try { v = localStorage.getItem('view'); } catch (e) {} }
+        if (viewIds.indexOf(v) < 0) v = defaultView;
+        d.dataset.view = v;
+        (preloads[v] || []).forEach(function (href) {
+          var l = document.createElement('link');
+          l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = ''; l.href = href;
+          document.head.appendChild(l);
+        });
         d.classList.add('js');
       })();
     </script>

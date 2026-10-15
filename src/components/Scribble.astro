@@ -1,0 +1,29 @@
+---
+// A short margin note, shown only in the Paper view. Wording lives in profile.json (paper.notes).
+// Decorative: hidden from screen readers, since it only repeats the page in a playful voice.
+interface Props { text?: string; arrow?: 'left' | 'down' | 'right' | 'none'; class?: string }
+const { text, arrow = 'none', class: cls = '' } = Astro.props;
+---
+{text && (
+  <span data-only="paper" aria-hidden="true" class:list={['scribble pointer-events-none select-none', `scribble-${arrow}`, cls]}>
+    {arrow === 'left' && (
+      <svg class="scribble-arrow" viewBox="0 0 60 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path pathLength="1" d="M57 8c-10 -4 -26 -3 -36 6 -6 6 -9 13 -12 20" />
+        <path pathLength="1" d="M3 27l6 8 7 -7" />
+      </svg>
+    )}
+    {arrow === 'down' && (
+      <svg class="scribble-arrow" viewBox="0 0 40 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path pathLength="1" d="M8 3c10 4 18 12 19 22 1 7 -1 14 -3 21" />
+        <path pathLength="1" d="M16 39l8 8 6 -10" />
+      </svg>
+    )}
+    <span class="scribble-text">{text}</span>
+    {arrow === 'right' && (
+      <svg class="scribble-arrow" viewBox="0 0 60 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path pathLength="1" d="M3 10c12 -5 28 -3 38 7 5 5 8 11 10 17" />
+        <path pathLength="1" d="M43 30l8 6 3 -10" />
+      </svg>
+    )}
+  </span>
+)}
