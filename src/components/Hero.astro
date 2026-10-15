@@ -13,7 +13,7 @@ const portrait = Object.values(portraits)[0]?.default;
 const [first, ...rest] = profile.name.split(' ');
 ---
 <section class="relative isolate flex min-h-[100svh] items-center overflow-hidden">
-  <canvas id="flow" data-only="editorial" class="absolute inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
+  <canvas id="flow" data-only="editorial" class="print:hidden absolute inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
   <div data-only="editorial" class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_70%_45%,transparent_35%,var(--bg)_85%)]"></div>
   <CodeRain />
 
@@ -54,12 +54,13 @@ const [first, ...rest] = profile.name.split(' ');
     ) : <div class="hidden md:block"><PaperSketch /><DisplayClock /></div>}
   </div>
 
-  <a href="#journey" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 font-mono sm:block text-[11px] uppercase tracking-[.3em] text-muted transition hover:text-accent" aria-label="Scroll to journey">
+  <a href="#journey" class="print:hidden absolute bottom-8 left-1/2 hidden -translate-x-1/2 font-mono sm:block text-[11px] uppercase tracking-[.3em] text-muted transition hover:text-accent" aria-label="Scroll to journey">
     scroll<span class="mx-auto mt-2 block h-8 w-px animate-pulse bg-current"></span>
   </a>
 </section>
 
 <style>
+  .name-line { white-space: nowrap; } /* letters are separate boxes; never break a name mid-word */
   .name-line > span { display: inline-block; opacity: 0; transform: translateY(.35em) rotate(4deg);
     animation: letter-in 1s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--i) * 45ms + 150ms); }
   @keyframes letter-in { to { opacity: 1; transform: none; } }

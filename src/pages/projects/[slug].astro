@@ -13,10 +13,16 @@ export async function getStaticPaths() {
 const { project, next, index } = Astro.props;
 const { data } = project;
 const { Content } = await render(project);
+// Reading time from everything on the page a reader would read (~220 words per minute)
+const words = [project.body ?? '', data.summary, ...data.features.flatMap((f) => [f.title, f.text])].join(' ').split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 220));
 ---
 <Base title={data.title} description={data.summary}>
   <article class="mx-auto max-w-4xl px-6 pt-32 pb-20">
-    <a href="/#projects" class="font-mono text-xs uppercase tracking-[.2em] text-muted transition hover:text-accent">← All projects</a>
+    <div class="flex items-baseline justify-between gap-4 font-mono text-xs uppercase tracking-[.2em] text-muted">
+      <a href="/#projects" class="transition hover:text-accent print:hidden">← All projects</a>
+      <p>{minutes} min read</p>
+    </div>
 
     <header class="mt-10">
       <h1 class="font-display text-5xl leading-[1.02] tracking-tight sm:text-7xl" data-reveal>{data.title}</h1>

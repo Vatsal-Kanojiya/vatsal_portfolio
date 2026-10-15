@@ -124,3 +124,37 @@ body::before {
   padding: .1em .35em; border-radius: .3rem;
 }
 .prose a { color: var(--accent); text-underline-offset: 3px; }
+
+/* Typography: balanced headings, no stranded last words in paragraphs */
+:is(h1, h2, h3, h4) { text-wrap: balance; }
+:is(p, li, dd, figcaption) { text-wrap: pretty; }
+
+/* ---- Print / Save as PDF: clean black on white in any view ---- */
+@media print {
+  :root, :root[data-view], :root[data-view][data-theme] {
+    --bg: #fff !important; --surface: #fff !important; --ink: #111 !important; --muted: #444 !important;
+    --line: #ccc !important; --accent: #111 !important; --accent-soft: #f2f2f2 !important; --warm: #111 !important;
+    --band: #fff !important; --band-ink: #111 !important; --band-accent: #111 !important;
+    --grain: 0 !important; --glow: none !important; --seg-shadow: none !important; --page: none !important; --scanlines: none !important;
+    color-scheme: light;
+  }
+  @page { margin: 16mm 14mm; }
+  body { background: #fff !important; }
+  body::before, body::after { display: none !important; }
+  /* Content waiting for its scroll-reveal must still print */
+  .js [data-reveal] { opacity: 1 !important; transform: none !important; }
+  section { min-height: 0 !important; padding-block: 1.5rem !important; }
+  .ui-card, .ui-readout, article > header, li, dl > div { break-inside: avoid; }
+  :is(h1, h2, h3) { break-after: avoid; }
+  [data-only], [data-ghost]::before, .term-cursor { display: none !important; }
+  [data-hide] { display: revert !important; } /* the default labels a view swapped out */
+  /* Entrance animations print in their finished state */
+  .name-line > span { opacity: 1 !important; transform: none !important; animation: none !important; }
+  h1 { font-size: 3rem !important; line-height: 1.1 !important; }
+  /* Most people print without backgrounds: filled pills and buttons become outlined ink */
+  .bg-ink, .bg-accent { background: none !important; box-shadow: inset 0 0 0 1px var(--ink) !important; }
+  .text-bg { color: var(--ink) !important; }
+  .ui-card { box-shadow: none !important; rotate: none !important; }
+  /* Show where external links go */
+  main a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .8em; color: var(--muted); word-break: break-all; }
+}

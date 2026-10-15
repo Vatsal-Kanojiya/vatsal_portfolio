@@ -21,7 +21,7 @@ const links = [
       </a>
       <!-- Many people would rather paste the address into their own mail tool. Needs JS, so hidden without it. -->
       <button type="button" id="copy-email" data-email={profile.email}
-        class="ui-pill hidden items-center gap-2 rounded-full border border-line bg-bg px-6 py-4 text-sm font-medium transition hover:border-accent hover:text-accent [.js_&]:inline-flex">
+        class="ui-pill hidden items-center gap-2 rounded-full border border-line bg-bg px-6 py-4 text-sm font-medium transition hover:border-accent hover:text-accent [.js_&]:inline-flex print:hidden">
         <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
         <span data-label>Copy email</span>
       </button>
