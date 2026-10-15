@@ -2,11 +2,25 @@
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/fraunces";
 @import "@fontsource-variable/jetbrains-mono";
+/* Font files only download when a view actually uses them */
+@import "@fontsource-variable/caveat";
+@import "@fontsource/reenie-beanie";
+@import "@fontsource/vt323";
+/* Views: each file overrides the tokens below under [data-view="<id>"] */
+@import "./views/paper.css";
+@import "./views/terminal.css";
+@import "./views/display.css";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* ---- Design tokens: warm paper by day, deep forest-ink by night ---- */
+/* ---- Design tokens: warm paper by day, deep forest-ink by night ----
+   These are the Editorial view (the default). Other views override them in src/styles/views/. */
 :root {
+  --ff-sans: "Inter Variable", system-ui, sans-serif;
+  --ff-display: "Fraunces Variable", Georgia, serif;
+  --ff-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --ff-code: var(--ff-mono);
+  --grain: .035;
   --bg: #f5f2ec;
   --surface: #fbf9f5;
   --ink: #1d1c1a;
@@ -44,9 +58,9 @@
   --color-warm: var(--warm);
   --color-band: var(--band);
   --color-band-ink: var(--band-ink);
-  --font-sans: "Inter Variable", system-ui, sans-serif;
-  --font-display: "Fraunces Variable", Georgia, serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --font-sans: var(--ff-sans);
+  --font-display: var(--ff-display);
+  --font-mono: var(--ff-mono);
 }
 
 /* Native cross-page transitions — smooth, zero JS */
@@ -56,7 +70,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-sans);
+  font-family: var(--ff-sans);
   -webkit-font-smoothing: antialiased;
   transition: background-color .4s ease, color .4s ease;
 }
@@ -67,7 +81,7 @@ body::before {
   content: "";
   position: fixed; inset: 0; pointer-events: none; z-index: 60;
   transform: translateZ(0);
-  opacity: .035;
+  opacity: var(--grain);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -89,7 +103,7 @@ body::before {
 /* Long-form case-study typography */
 .prose { font-size: 1.075rem; line-height: 1.8; color: var(--ink); }
 .prose h2 {
-  font-family: var(--font-display); font-size: 1.75rem; line-height: 1.25;
+  font-family: var(--ff-display); font-size: 1.75rem; line-height: 1.25;
   margin: 3rem 0 1rem; letter-spacing: -.01em;
 }
 .prose p { margin: 1rem 0; color: color-mix(in oklab, var(--ink) 85%, var(--muted)); }
@@ -98,7 +112,7 @@ body::before {
 .prose li::before { content: ""; position: absolute; left: -1.1rem; top: .8em; width: .45rem; height: 1px; background: var(--accent); }
 .prose strong { color: var(--ink); font-weight: 600; }
 .prose code {
-  font-family: var(--font-mono); font-size: .88em;
+  font-family: var(--ff-code); font-size: .88em;
   background: var(--accent-soft); color: var(--accent);
   padding: .1em .35em; border-radius: .3rem;
 }

@@ -9,7 +9,7 @@ import SectionHead from './SectionHead.astro';
       <div class="grid gap-3 py-6 md:grid-cols-[12rem_1fr]" data-reveal style={`--d:${i * 50}ms`}>
         <dt class="font-mono text-xs uppercase tracking-[.15em] text-muted md:pt-1.5">{g.group}</dt>
         <dd class="flex flex-wrap gap-2">
-          {g.items.map((s) => <span class="rounded-full border border-line px-3 py-1 text-sm transition hover:border-accent hover:bg-accent-soft hover:text-accent">{s}</span>)}
+          {g.items.map((s) => <span class="ui-pill rounded-full border border-line px-3 py-1 text-sm transition hover:border-accent hover:bg-accent-soft hover:text-accent">{s}</span>)}
         </dd>
       </div>
     ))}

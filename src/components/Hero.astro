@@ -2,6 +2,10 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import profile from '../data/profile.json';
+import PaperSketch from './PaperSketch.astro';
+import Scribble from './Scribble.astro';
+import CodeRain from './CodeRain.astro';
+import DisplayClock from './DisplayClock.astro';
 
 // Drop a file named portrait.(jpg|png|webp) into src/assets/photos/ and it appears here.
 const portraits = import.meta.glob<{ default: ImageMetadata }>('../assets/photos/portrait.{jpg,jpeg,png,webp}', { eager: true });
@@ -9,29 +13,34 @@ const portrait = Object.values(portraits)[0]?.default;
 const [first, ...rest] = profile.name.split(' ');
 ---
 <section class="relative isolate flex min-h-[100svh] items-center overflow-hidden">
-  <canvas id="flow" class="absolute inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
-  <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_70%_45%,transparent_35%,var(--bg)_85%)]"></div>
+  <canvas id="flow" data-only="editorial" class="absolute inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
+  <div data-only="editorial" class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_70%_45%,transparent_35%,var(--bg)_85%)]"></div>
+  <CodeRain />
 
   <div class="mx-auto grid w-full max-w-5xl items-center gap-12 px-6 pt-28 pb-20 md:grid-cols-[1.4fr_1fr]">
     <div>
-      <p class="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs text-muted" data-reveal>
+      <p class="ui-pill mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs text-muted" data-reveal>
         <span class="relative flex size-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60"></span><span class="relative inline-flex size-2 rounded-full bg-accent"></span></span>
         {profile.openTo}
       </p>
-      <h1 class="font-display text-6xl leading-[.95] tracking-tight sm:text-7xl md:text-8xl" aria-label={profile.name}>
-        <span class="name-line">{[...first].map((c, i) => <span style={`--i:${i}`}>{c}</span>)}</span><br />
-        <span class="name-line italic text-accent">{[...rest.join(' ')].map((c, i) => <span style={`--i:${i + first.length}`}>{c}</span>)}</span>
-      </h1>
+      <p data-only="terminal" class="mb-3 font-mono text-sm text-muted" aria-hidden="true"><span class="text-accent">vatsal@bengaluru</span>:~$ whoami</p>
+      <div class="relative">
+        <h1 class="font-display text-6xl leading-[.95] tracking-tight sm:text-7xl md:text-8xl" aria-label={profile.name}>
+          <span class="name-line">{[...first].map((c, i) => <span style={`--i:${i}`}>{c}</span>)}</span><br />
+          <span class="name-line doodle-underline italic text-accent">{[...rest.join(' ')].map((c, i) => <span style={`--i:${i + first.length}`}>{c}</span>)}</span><span data-only="terminal" class="term-cursor" aria-hidden="true"></span>
+        </h1>
+        <Scribble text={profile.paper.notes.hero} arrow="left" class="absolute top-0 left-[11.5rem] w-max sm:left-[14rem] md:left-[18.5rem]" />
+      </div>
       <p class="mt-6 font-mono text-sm uppercase tracking-[.18em] text-muted" data-reveal style="--d:160ms">
         {profile.role} · {profile.location.split(',')[0]} · <time id="local-time" class="text-ink">--:--</time> IST
       </p>
       <p class="mt-8 max-w-xl font-display text-2xl leading-snug italic sm:text-3xl" data-reveal style="--d:240ms">{profile.headline}</p>
       <p class="mt-5 max-w-xl text-lg leading-relaxed text-muted" data-reveal style="--d:320ms">{profile.intro}</p>
       <div class="mt-10 flex flex-wrap gap-3" data-reveal style="--d:400ms">
-        <a href="#projects" class="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition hover:bg-accent">
+        <a href="#projects" class="ui-pill ui-btn group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition hover:bg-accent">
           See my projects <span class="transition group-hover:translate-x-1">→</span>
         </a>
-        <a href={profile.links.resume} download class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-6 py-3 text-sm font-medium transition hover:border-accent hover:text-accent">
+        <a href={profile.links.resume} download class="ui-pill inline-flex items-center gap-2 rounded-full border border-line bg-surface px-6 py-3 text-sm font-medium transition hover:border-accent hover:text-accent">
           Download résumé
         </a>
       </div>
@@ -39,10 +48,10 @@ const [first, ...rest] = profile.name.split(' ');
 
     {portrait ? (
       <div class="relative mx-auto w-56 sm:w-72" data-reveal style="--d:300ms">
-        <div class="absolute -inset-3 rounded-[2rem] border border-accent/30 rotate-3"></div>
-        <Image src={portrait} alt={`Portrait of ${profile.name}`} widths={[320, 640]} sizes="18rem" class="relative aspect-[4/5] rounded-[1.75rem] object-cover shadow-xl" loading="eager" />
+        <div class="absolute -inset-3 rounded-[2rem] border border-accent/30 rotate-3" data-only="editorial"></div>
+        <Image src={portrait} alt={`Portrait of ${profile.name}`} widths={[320, 640]} sizes="18rem" class="ui-photo relative aspect-[4/5] rounded-[1.75rem] object-cover shadow-xl" loading="eager" />
       </div>
-    ) : <div class="hidden md:block"></div>}
+    ) : <div class="hidden md:block"><PaperSketch /><DisplayClock /></div>}
   </div>
 
   <a href="#journey" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 font-mono sm:block text-[11px] uppercase tracking-[.3em] text-muted transition hover:text-accent" aria-label="Scroll to journey">
@@ -114,7 +123,8 @@ const [first, ...rest] = profile.name.split(' ');
       ctx.globalAlpha = 1;
     };
     const loop = () => { step(); raf = requestAnimationFrame(loop); };
-    const start = () => { if (!running && !reduce) { running = true; loop(); } };
+    const shown = () => document.documentElement.dataset.view === 'editorial';
+    const start = () => { if (!running && !reduce && shown()) { running = true; loop(); } };
     const stop = () => { running = false; cancelAnimationFrame(raf); };
 
     resize();
@@ -133,7 +143,11 @@ const [first, ...rest] = profile.name.split(' ');
     let ready = false;
     new IntersectionObserver(([e]) => { if (!ready) { ready = true; return; } e.isIntersecting ? start() : stop(); }).observe(canvas);
     document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-    new MutationObserver(() => { color = accent(); ctx.clearRect(0, 0, w, h); })
-      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    new MutationObserver(() => {
+      color = accent(); ctx.clearRect(0, 0, w, h);
+      if (!shown()) stop();
+      else if (reduce) for (let i = 0; i < 220; i++) step();
+      else start();
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-view'] });
   }
 </script>

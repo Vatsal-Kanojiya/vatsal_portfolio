@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
 import ProjectVisual from './ProjectVisual.astro';
 import { visible } from '../lib/site';
+import profile from '../data/profile.json';
 
 const all = (await getCollection('projects', visible)).sort((a, b) => a.data.order - b.data.order);
 const showcase = all.filter((p) => p.data.kind === 'showcase');
@@ -20,11 +21,12 @@ const steps = [
 ---
 <section id="projects" class="mx-auto max-w-5xl px-6 py-28">
   <SectionHead index="03" eyebrow="Projects" title="Things I build<br/><em class='text-accent'>on my own time.</em>"
-    lead="Personal projects, built to production standards. Open one to see everything it does." />
+    lead="Personal projects, built to production standards. Open one to see everything it does."
+    note={profile.paper.notes.projects} />
 
   <div class="space-y-8">
     {showcase.map(({ id, data }, i) => (
-      <a href={`/projects/${id}/`} class="group grid overflow-hidden rounded-3xl border border-line bg-surface transition duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_30px_60px_-30px_var(--accent)] md:grid-cols-[1fr_1.1fr]"
+      <a href={`/projects/${id}/`} class="ui-card group grid overflow-hidden rounded-3xl border border-line bg-surface transition duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_30px_60px_-30px_var(--accent)] md:grid-cols-[1fr_1.1fr]"
         data-reveal style={`--d:${i * 80}ms`}>
         <div class="relative aspect-[16/10] overflow-hidden md:aspect-auto md:min-h-80">
           {data.cover
@@ -33,10 +35,10 @@ const steps = [
         </div>
         <div class="flex flex-col p-7 sm:p-9">
           <div class="mb-4 flex flex-wrap items-center gap-2">
-            <span class="inline-flex items-center gap-2 rounded-full border border-line px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted">
+            <span class="ui-pill inline-flex items-center gap-2 rounded-full border border-line px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted">
               <span class={`size-1.5 rounded-full ${data.status === 'live' ? 'bg-accent' : 'bg-warm'}`}></span>{statusLabel[data.status]}
             </span>
-            {data.platforms.map((p) => <span class="rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] text-accent">{p}</span>)}
+            {data.platforms.map((p) => <span class="ui-pill rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] text-accent">{p}</span>)}
           </div>
           <h3 class="font-display text-3xl tracking-tight">{data.title}</h3>
           <p class="mt-1 font-display text-xl italic text-accent">{data.tagline}</p>
@@ -62,7 +64,7 @@ const steps = [
   <ol class="relative grid gap-6 sm:grid-cols-4">
     {steps.map((s, i) => (
       <li class="relative pl-6 sm:pl-0 sm:pt-8" data-reveal style={`--d:${i * 90}ms`}>
-        <span class={`absolute top-1 left-0 size-[15px] rounded-full border-2 sm:top-0 ${i === steps.length - 1 ? 'border-accent bg-accent ring-4 ring-accent/20' : i >= 2 ? 'border-accent bg-accent' : 'border-muted bg-bg'}`}></span>
+        <span class={`ui-dot absolute top-1 left-0 size-[15px] rounded-full border-2 sm:top-0 ${i === steps.length - 1 ? 'border-accent bg-accent ring-4 ring-accent/20' : i >= 2 ? 'border-accent bg-accent' : 'border-muted bg-bg'}`}></span>
         <p class="font-mono text-xs text-muted">{s.year}</p>
         <p class="mt-1 font-display text-xl tracking-tight">{s.title}</p>
         <p class="mt-1 text-sm leading-snug text-muted">{s.added}</p>
@@ -73,14 +75,14 @@ const steps = [
 
   <div class="mt-12 grid gap-4 sm:grid-cols-2">
     {early.map(({ data }, i) => (
-      <a href={data.repo} target="_blank" rel="noopener" class="group rounded-2xl border border-dashed border-line p-6 transition hover:border-accent/60 hover:bg-surface"
+      <a href={data.repo} target="_blank" rel="noopener" class="ui-card ui-tape group rounded-2xl border border-dashed border-line p-6 transition hover:border-accent/60 hover:bg-surface"
         data-reveal style={`--d:${i * 80}ms`}>
         <p class="font-mono text-xs text-muted">{data.year} · early work</p>
         <h4 class="mt-2 font-display text-2xl tracking-tight">{data.title} <span class="text-base text-muted transition group-hover:text-accent">↗</span></h4>
         <p class="mt-1 text-accent">{data.tagline}</p>
         <p class="mt-3 text-[15px] leading-relaxed text-muted">{data.summary}</p>
         <ul class="mt-4 flex flex-wrap gap-1.5">
-          {data.stack.map((s) => <li class="rounded-full bg-surface px-2.5 py-0.5 font-mono text-[11px] text-muted group-hover:bg-bg">{s}</li>)}
+          {data.stack.map((s) => <li class="ui-pill rounded-full bg-surface px-2.5 py-0.5 font-mono text-[11px] text-muted group-hover:bg-bg">{s}</li>)}
         </ul>
       </a>
     ))}

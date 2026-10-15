@@ -13,7 +13,7 @@ npm run build      # must pass before every commit
 
 ## Stack
 
-Astro 7 (static output) + Tailwind CSS v4 (`@tailwindcss/vite`) + React islands only where interactivity needs it (`src/components/JourneyTrack.tsx`, using `motion`). Fonts come from `@fontsource-variable/*`. Cross-page transitions use native CSS `@view-transition`. Everything else is plain Astro components with small inline `<script>`s.
+Astro 7 (static output) + Tailwind CSS v4 (`@tailwindcss/vite`) + React islands only where interactivity needs it (`src/components/JourneyTrack.tsx`, using `motion`). Fonts come from `@fontsource-variable/*`. Cross-page transitions use native CSS `@view-transition`. Switchable views are described under **Views** below. Everything else is plain Astro components with small inline `<script>`s.
 
 ## Layout
 
@@ -33,22 +33,41 @@ Astro 7 (static output) + Tailwind CSS v4 (`@tailwindcss/vite`) + React islands 
 - Facts come from Vatsal's résumé, his repos or him. Don't invent achievements, numbers or story details. If something is missing, leave a clear TODO and ask.
 - Write feature descriptions in plain user terms. Keep technical depth to a short "under the hood" section.
 
-## Next feature: switchable views, starting with **Paper**
+## Views (switchable looks over the same content)
 
-The spec is in `docs/ROADMAP.md`. In short:
+Built: **Editorial** (default), **Paper** (handwritten notebook), **Terminal** (green screen) and **Display** (segment displays). See `docs/ROADMAP.md` for the original ideas.
 
-- **Editorial** (the current design) is the default and must stay unchanged for anyone who doesn't switch.
-- **Paper** is a handwritten-notebook look over the same content: paper texture (ruled or dotted page, slight grain), ink colours, margin notes and doodled underlines. **Caveat** (400–700) for text and headings. **Reenie Beanie** for short margin scribbles only, because it gets unreadable in long text. Both are on Fontsource (`@fontsource-variable/caveat`, `@fontsource/reenie-beanie`).
-- Later views: Terminal and Display (see the roadmap). Build the switch so adding a view is mostly a new token set.
+- **Editorial** is the default and must stay unchanged for anyone who doesn't switch.
+- `src/lib/views.ts` is the registry (id, label, hint, preview font, fonts to fetch, preload, optional `secret` word that switches to the view when typed).
+- `Base.astro` sets `data-view` on `<html>` before paint: `?view=` first (and remembers it), then localStorage `view`, else the default. Every storage access is in try/catch. It also generates the `data-only` rules from the registry.
+- `src/styles/views/<id>.css` overrides the tokens under `:root[data-view="<id>"]` and `:root[data-view="<id>"][data-theme="dark"]`, including fonts (`--ff-sans`, `--ff-display`, `--ff-mono`, `--ff-code`) and `--grain`. Tailwind's `font-*` utilities read these.
+- `ViewSwitch.astro` (in the nav) lists the registry.
+- `data-only="<id>"` shows an element only in that view (e.g. the flow-field canvas is `editorial`, `PaperSketch` and `Scribble` are `paper`, `CodeRain` is `terminal`, `DisplayClock` is `display`). `data-hide="<id> …"` hides an element in those views.
+- View-agnostic hook classes in components, styled per view: `ui-card`, `ui-pill`, `ui-btn`, `ui-index`, `ui-dot`, `ui-tape`, `ui-photo`, `doodle-underline`. Editorial doesn't style them.
 
-Suggested mechanism (adjust if something better fits):
-- A `data-view="editorial|paper"` attribute on `<html>`, set before paint in `Base.astro` next to the theme script. Read it from `?view=` first, then localStorage `view`, else `editorial`. Wrap every storage access in try/catch.
-- Per-view tokens in `global.css` (`[data-view="paper"]`, plus `[data-view="paper"][data-theme="dark"]`), including font tokens (`--font-display`, `--font-sans`).
-- A small view switcher in `Nav.astro` next to the theme toggle.
-- View-specific decoration (hero animation, textures) toggled by the attribute. The Editorial flow-field canvas can be hidden or replaced in Paper.
+**Adding a view:** add an entry to `views.ts`, add `src/styles/views/<id>.css` and import it in `global.css`, add any hero decoration as a `data-only="<id>"` component. JS animations should pause when their view isn't showing (see the flow-field script in `Hero.astro`).
+
+**Paper specifics** (all in `src/styles/views/paper.css` unless noted):
+- Caveat for text and headings, Reenie Beanie for short margin scribbles only. Body uses `font-size-adjust` so Caveat matches Editorial's x-height.
+- Page pattern is one token, `--page`: `--pattern-dots` (current), `--pattern-ruled`, `--pattern-grid` or `--pattern-plain`.
+- Margin-note wording is in `profile.json` → `paper.notes`. The hero sketch is `PaperSketch.astro`.
+- Dark theme = black paper with gel-pen inks. The band (`bg-band`) becomes kraft paper.
+
+**Terminal specifics** (`src/styles/views/terminal.css`):
+- VT323 for headings (one weight, sized up with `font-size-adjust`), JetBrains Mono for text. All corners square.
+- Dark = green screen with glow and scanlines; light = green-bar line-printer paper. Scanlines are one token, `--scanlines`.
+- Hero: `CodeRain.astro` (columns spell real stack tokens), a `whoami` prompt and a blinking cursor. Section eyebrows become `$ cat <section>.md` (`SectionHead.astro`). Tags render as `[tag]`.
+- Typing `matrix` anywhere switches to it.
+
+**Display specifics** (`src/styles/views/display.css`):
+- DSEG14 for `h1`, `h2` and `.font-display` headings (uppercase), DSEG7 for the clock and section numbers. Body text and sentences set in the display font (hero headline, taglines) stay Inter.
+- Numbers (`.ui-num`) use a numerals-only cut of DSEG7, so letters like the "s" in "5s" stay in the text font (on segments, S and 5 look the same).
+- Ghost segments: put `data-ghost={ghost(text, 7 | 14)}` (from `src/lib/site.ts`) on an element. Use it on numbers only; on per-letter animated text it drifts out of line.
+- Light = calculator LCD, dark = amber LED train board with a faint dot-matrix page. The band becomes a VFD panel. Stats (`.ui-readout`) become LCD readouts.
+- Hero: `DisplayClock.astro`, a live IST clock that ticks only while the view shows.
 
 Guardrails for every view:
-- Readable contrast in light and dark.
+- Readable contrast in light and dark (WCAG AA for text).
 - Display or handwriting fonts must not make paragraphs hard to read.
 - Respect `prefers-reduced-motion`.
 - No horizontal scroll at 390px width.
