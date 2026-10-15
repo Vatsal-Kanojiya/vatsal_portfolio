@@ -1,0 +1,117 @@
+/* =====================================================================
+   DISPLAY VIEW: segment displays over the same content.
+   Light = a calculator LCD. Dark = an amber LED train board.
+   Opt-in via the view switch or ?view=display.
+
+   Swappable parts, each in one place:
+     - inks ......... the two token blocks below
+     - fonts ........ DSEG14 for headings, DSEG7 for clock digits and section numbers.
+                      Body text stays Inter: segment fonts are for headings and numbers only.
+     - ghosts ....... data-ghost="…" on an element (see ghost() in src/lib/site.ts), faintness = --ghost
+     - hero ......... DisplayClock.astro
+   ===================================================================== */
+
+@font-face { font-family: "DSEG7 Classic"; font-weight: 400; font-display: swap; src: url("../../../node_modules/dseg/fonts/DSEG7-Classic/DSEG7Classic-Regular.woff2") format("woff2"); }
+@font-face { font-family: "DSEG7 Classic"; font-weight: 700; font-display: swap; src: url("../../../node_modules/dseg/fonts/DSEG7-Classic/DSEG7Classic-Bold.woff2") format("woff2"); }
+/* Numerals-only cut: digits and number punctuation in segments; letters ("5s", "ms") fall back to
+   the text font, because S and 5 are the same shape on a segment display */
+@font-face { font-family: "DSEG7 Numerals"; font-weight: 400 700; font-display: swap; unicode-range: U+0020-0040; src: url("../../../node_modules/dseg/fonts/DSEG7-Classic/DSEG7Classic-Bold.woff2") format("woff2"); }
+@font-face { font-family: "DSEG14 Classic"; font-weight: 400; font-display: swap; src: url("../../../node_modules/dseg/fonts/DSEG14-Classic/DSEG14Classic-Regular.woff2") format("woff2"); }
+
+:root[data-view="display"] {
+  --ff-display: "DSEG14 Classic", "JetBrains Mono Variable", monospace;
+  --ff-seg7: "DSEG7 Classic", "JetBrains Mono Variable", monospace;
+  --tracking-tight: .02em;
+  --radius-xl: .35rem; --radius-2xl: .5rem; --radius-3xl: .7rem;
+
+  /* Light: calculator LCD. Grey-green glass, near-black segments with a faint drop shadow. */
+  --bg: #dde1d0;
+  --surface: #c9d0b8;
+  --ink: #161c13;
+  --muted: #464e3e;
+  --line: #a7b098;
+  --accent: #1d4263;
+  --accent-soft: #bccab9;
+  --warm: #862a0d;
+  --band: #0c110d;
+  --band-ink: #8ef2cf;
+  --band-accent: #f2c14e;
+  --grain: .04;
+  --ghost: .09;
+  --seg-shadow: .06em .06em 0 rgb(0 0 0 / .12);
+  --bezel: inset 0 2px 6px rgb(0 0 0 / .18), inset 0 0 0 1px rgb(0 0 0 / .06);
+  --page: none;
+  color-scheme: light;
+}
+
+/* Dark: amber LED train board on black, with a faint LED-matrix dot pattern */
+:root[data-view="display"][data-theme="dark"] {
+  --bg: #0b0806;
+  --surface: #120d08;
+  --ink: #ffc266;
+  --muted: #b58a52;
+  --line: #2e2316;
+  --accent: #ff7b30;
+  --accent-soft: #2a1a0c;
+  --warm: #ffe08a;
+  --band: #140e07;
+  --band-ink: #ffc266;
+  --band-accent: #ff7b30;
+  --grain: .05;
+  --ghost: .07;
+  --seg-shadow: 0 0 .35em color-mix(in oklab, currentColor 55%, transparent);
+  --bezel: inset 0 2px 10px rgb(0 0 0 / .7), inset 0 0 0 1px rgb(255 190 110 / .06);
+  --page: radial-gradient(circle, color-mix(in oklab, var(--ink) 7%, transparent) 1px, transparent 1.5px) 0 0 / 5px 5px;
+  color-scheme: dark;
+}
+
+/* ---- Page & type ---- */
+[data-view="display"] body { background: var(--page), var(--bg); font-synthesis: none; }
+[data-view="display"] :is(em, i, .italic) { font-style: normal; }
+/* Segment font for headings and numbers. Uppercase reads far better on 14 segments;
+   cap-height adjust keeps the wide glyphs close to the Editorial line lengths. */
+[data-view="display"] :is(h1, h2, .font-display) {
+  font-weight: 400; text-transform: uppercase; letter-spacing: .02em;
+  font-size-adjust: cap-height .52; line-height: 1.25; overflow-wrap: anywhere;
+  word-spacing: .35em; /* DSEG's space is as narrow as its colon */
+  text-shadow: var(--seg-shadow);
+}
+/* Sentences set in the display font elsewhere (hero headline, taglines) stay readable */
+[data-view="display"] p.font-display { font-family: var(--ff-sans); text-transform: none; font-size-adjust: none; font-weight: 600; letter-spacing: -.01em; word-spacing: normal; text-shadow: none; }
+[data-view="display"] h1 { line-height: 1.12; }
+[data-view="display"] .ui-num { font-family: "DSEG7 Numerals", var(--ff-sans); text-transform: none; word-spacing: normal; font-weight: 700; }
+[data-view="display"] :is(h2, h3) em { color: var(--accent); }
+[data-view="display"] #local-time { font-family: var(--ff-seg7); letter-spacing: 0; }
+
+/* Ghost segments: every position fully lit, faintly, behind the text */
+[data-view="display"] [data-ghost] { position: relative; }
+[data-view="display"] [data-ghost]::before {
+  content: attr(data-ghost); content: attr(data-ghost) / "";
+  position: absolute; inset: 0; opacity: var(--ghost); text-shadow: none; pointer-events: none;
+}
+
+/* ---- Hooks ---- */
+[data-view="display"] .ui-card { box-shadow: var(--bezel); }
+[data-view="display"] .ui-pill { border-radius: .3rem; }
+[data-view="display"] .ui-btn { border-radius: .4rem; box-shadow: 0 3px 0 color-mix(in oklab, var(--ink) 35%, transparent); }
+[data-view="display"] .ui-btn:active { translate: 0 2px; box-shadow: 0 1px 0 color-mix(in oklab, var(--ink) 35%, transparent); }
+[data-view="display"] .ui-index { font-family: var(--ff-seg7); font-size: 1.15em; letter-spacing: 0; }
+[data-view="display"] .ui-dot { box-shadow: 0 0 .5rem color-mix(in oklab, var(--accent) 60%, transparent); }
+/* Stats become LCD readouts */
+[data-view="display"] .ui-readout { padding: 1rem 1.1rem; margin: 0 .35rem; border-radius: .5rem; background: var(--surface); box-shadow: var(--bezel); }
+
+/* The dark band becomes a vacuum-fluorescent panel */
+[data-view="display"] .bg-band { --warm: var(--band-accent); }
+
+/* ---- Hero clock ---- */
+.lcd-panel { box-shadow: var(--bezel); }
+.lcd-7 { font-family: var(--ff-seg7); font-weight: 700; color: var(--ink); text-shadow: var(--seg-shadow); line-height: 1; }
+.lcd-14 { font-family: var(--ff-display); color: var(--ink); text-shadow: var(--seg-shadow); }
+.lcd-clock .lcd-7 { font-size: clamp(3.2rem, 7vw, 5rem); }
+.lcd-clock .lcd-sec { font-size: 1.6rem; margin-left: .6rem; color: var(--accent); }
+.lcd-date { font-size: 1.05rem; letter-spacing: .08em; }
+.lcd-led { width: .55rem; height: .55rem; border-radius: 50%; background: var(--accent); box-shadow: 0 0 .5rem var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .lcd-colon { animation: lcd-blink 1s steps(1) infinite; }
+}
+@keyframes lcd-blink { 50% { opacity: var(--ghost); } }

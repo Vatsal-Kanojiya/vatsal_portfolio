@@ -1,14 +1,14 @@
 ---
 import profile from '../data/profile.json';
-import { yearsOfExperience } from '../lib/site';
+import { yearsOfExperience, ghost } from '../lib/site';
 const stats = profile.stats.map((s) => ({ ...s, value: s.value.replace('{years}', yearsOfExperience()) }));
 ---
 <section class="border-y border-line bg-surface/60">
   <dl class="mx-auto grid max-w-5xl grid-cols-2 gap-y-10 px-6 py-14 md:grid-cols-4">
     {stats.map((s, i) => (
-      <div class="px-2" data-reveal style={`--d:${i * 90}ms`}>
+      <div class="ui-readout px-2" data-reveal style={`--d:${i * 90}ms`}>
         <dt class="sr-only">{s.label}</dt>
-        <dd class="font-display text-4xl tracking-tight sm:text-5xl">{s.value}</dd>
+        <dd class="ui-num font-display text-4xl tracking-tight sm:text-5xl" data-ghost={ghost(s.value, 7)}>{s.value}</dd>
         <dd class="mt-2 max-w-[14rem] text-sm leading-snug text-muted">{s.label}</dd>
       </div>
     ))}

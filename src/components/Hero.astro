@@ -5,6 +5,7 @@ import profile from '../data/profile.json';
 import PaperSketch from './PaperSketch.astro';
 import Scribble from './Scribble.astro';
 import CodeRain from './CodeRain.astro';
+import DisplayClock from './DisplayClock.astro';
 
 // Drop a file named portrait.(jpg|png|webp) into src/assets/photos/ and it appears here.
 const portraits = import.meta.glob<{ default: ImageMetadata }>('../assets/photos/portrait.{jpg,jpeg,png,webp}', { eager: true });
@@ -50,7 +51,7 @@ const [first, ...rest] = profile.name.split(' ');
         <div class="absolute -inset-3 rounded-[2rem] border border-accent/30 rotate-3" data-only="editorial"></div>
         <Image src={portrait} alt={`Portrait of ${profile.name}`} widths={[320, 640]} sizes="18rem" class="ui-photo relative aspect-[4/5] rounded-[1.75rem] object-cover shadow-xl" loading="eager" />
       </div>
-    ) : <div class="hidden md:block"><PaperSketch /></div>}
+    ) : <div class="hidden md:block"><PaperSketch /><DisplayClock /></div>}
   </div>
 
   <a href="#journey" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 font-mono sm:block text-[11px] uppercase tracking-[.3em] text-muted transition hover:text-accent" aria-label="Scroll to journey">

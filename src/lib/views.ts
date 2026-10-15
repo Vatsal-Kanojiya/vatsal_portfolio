@@ -2,6 +2,7 @@
 // Adding a view = an entry here + a token file in src/styles/views/ (imported from global.css).
 import caveat from '@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2?url';
 import vt323 from '@fontsource/vt323/files/vt323-latin-400-normal.woff2?url';
+import dseg14 from 'dseg/fonts/DSEG14-Classic/DSEG14Classic-Regular.woff2?url';
 
 export interface View {
   id: string;
@@ -37,5 +38,13 @@ export const views: View[] = [
     fonts: ['1em "VT323"', '400 1em "JetBrains Mono Variable"'],
     preload: [vt323],
     secret: 'matrix',
+  },
+  {
+    id: 'display',
+    label: 'Display',
+    hint: 'LCD by day, amber LED by night.',
+    previewFont: '"DSEG14 Classic", monospace',
+    fonts: ['400 1em "DSEG14 Classic"', '400 1em "DSEG7 Classic"'],
+    preload: [dseg14],
   },
 ];

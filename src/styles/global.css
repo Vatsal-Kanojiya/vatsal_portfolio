@@ -9,6 +9,7 @@
 /* Views: each file overrides the tokens below under [data-view="<id>"] */
 @import "./views/paper.css";
 @import "./views/terminal.css";
+@import "./views/display.css";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 

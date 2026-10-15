@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import ProjectVisual from '../../components/ProjectVisual.astro';
-import { visible } from '../../lib/site';
+import { visible, ghost } from '../../lib/site';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects', (p) => visible(p) && p.data.kind === 'showcase')).sort((a, b) => a.data.order - b.data.order);
@@ -44,7 +44,7 @@ const { Content } = await render(project);
       <dl class="ui-card mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
         {data.highlights.map((h, i) => (
           <div class="bg-surface p-6" data-reveal style={`--d:${i * 80}ms`}>
-            <dd class="font-display text-4xl tracking-tight text-accent">{h.value}</dd>
+            <dd class="ui-num font-display text-4xl tracking-tight text-accent" data-ghost={ghost(h.value, 7)}>{h.value}</dd>
             <dt class="mt-2 text-sm leading-snug text-muted">{h.label}</dt>
           </div>
         ))}
