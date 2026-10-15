@@ -1,0 +1,29 @@
+# Edge proxy + portfolio. Run from the repo root:
+#   docker compose -f deploy/compose.yaml --env-file deploy/.env up -d --build
+services:
+  edge:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        SITE_URL: https://${DOMAIN:?set DOMAIN in deploy/.env}
+    environment:
+      DOMAIN: ${DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - edge
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  edge:
+    name: edge

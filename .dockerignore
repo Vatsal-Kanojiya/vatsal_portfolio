@@ -1,0 +1,8 @@
+node_modules
+dist
+.astro
+.git
+tools/handfont/.venv
+tools/handfont/scans
+tools/handfont/out
+deploy/.env

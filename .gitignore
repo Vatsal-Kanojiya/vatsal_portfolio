@@ -11,3 +11,5 @@ tools/handfont/.venv/
 tools/handfont/scans/
 tools/handfont/out/
 __pycache__/
+
+deploy/.env

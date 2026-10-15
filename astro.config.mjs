@@ -5,8 +5,8 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  // TODO: replace with your real domain once it's pointed at the host
-  site: 'https://vatsalkanojiya.dev',
+  // Set SITE_URL at build time (deploy/.env); the fallback is a placeholder until the domain is final
+  site: process.env.SITE_URL ?? 'https://vatsalkanojiya.dev',
   integrations: [react(), sitemap({ filter: (page) => !page.endsWith('/404/') })],
   vite: { plugins: [tailwindcss()] },
 });
