@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import SectionHead from './SectionHead.astro';
-import JourneyTrack from './JourneyTrack';
+import JourneyTrack from './JourneyTrack.astro';
 import { visible } from '../lib/site';
 import profile from '../data/profile.json';
 
@@ -21,7 +21,7 @@ const dot: Record<string, string> = {
     lead="An engineer first, by training. A software engineer by choice. Each step added something I still use."
     note={profile.paper.notes.journey} />
 
-  <JourneyTrack client:visible>
+  <JourneyTrack>
     <ol class="space-y-14">
       {items.map(({ data, Content }, i) => (
         <li class="relative grid gap-3 pl-10 md:grid-cols-[9rem_1fr] md:gap-10 md:pl-0" data-reveal style={`--d:${(i % 3) * 60}ms`}>

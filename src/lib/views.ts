@@ -1,5 +1,7 @@
 // The switchable "views": same content, different atmosphere.
 // Adding a view = an entry here + a token file in src/styles/views/ (imported from global.css).
+import inter from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import fraunces from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
 import caveat from '@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2?url';
 import vt323 from '@fontsource/vt323/files/vt323-latin-400-normal.woff2?url';
 import dseg14 from 'dseg/fonts/DSEG14-Classic/DSEG14Classic-Regular.woff2?url';
@@ -21,7 +23,7 @@ export interface View {
 export const defaultView = 'editorial';
 
 export const views: View[] = [
-  { id: 'editorial', label: 'Editorial', hint: 'Clean and modern. The default.', previewFont: '"Fraunces Variable", Georgia, serif' },
+  { id: 'editorial', label: 'Editorial', hint: 'Clean and modern. The default.', previewFont: '"Fraunces Variable", Georgia, serif', preload: [inter, fraunces] },
   {
     id: 'paper',
     label: 'Paper',

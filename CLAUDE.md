@@ -13,7 +13,7 @@ npm run build      # must pass before every commit
 
 ## Stack
 
-Astro 7 (static output) + Tailwind CSS v4 (`@tailwindcss/vite`) + React islands only where interactivity needs it (`src/components/JourneyTrack.tsx`, using `motion`). Fonts come from `@fontsource-variable/*`. Cross-page transitions use native CSS `@view-transition`. Switchable views are described under **Views** below. Everything else is plain Astro components with small inline `<script>`s.
+Astro 7 (static output) + Tailwind CSS v4 (`@tailwindcss/vite`). No client framework: interactivity is small inline `<script>`s, and the journey line (`JourneyTrack.astro`) is a CSS scroll-driven animation with a tiny JS fallback. CSS is inlined into each page (`build.inlineStylesheets`). Fonts come from `@fontsource-variable/*` (plus `dseg` for the Display view). Cross-page transitions use native CSS `@view-transition`. Switchable views are described under **Views** below. 
 
 ## Layout
 
