@@ -78,4 +78,4 @@ Guardrails for every view:
 
 ## Git
 
-Other Claude Code sessions work on this repo in parallel. `git pull` before starting, then commit **and push** each finished, build-passing step so everyone sees the current state. Small, focused commits with descriptive messages. Never commit `tools/handfont/scans/` or `out/` (they hold raw handwriting and are git-ignored).
+Other Claude Code sessions work on this repo in parallel. `git pull` before starting, then commit **and push** each finished, build-passing step so everyone sees the current state. Vatsal wants intermediate commits too: don't wait for a feature to be complete, commit and push every working milestone along the way (build passing), so no development is lost if a session ends. Small, focused commits with descriptive messages. Never commit `tools/handfont/scans/` or `out/` (they hold raw handwriting and are git-ignored).
