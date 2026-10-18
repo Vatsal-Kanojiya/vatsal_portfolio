@@ -57,3 +57,7 @@ Guardrails for every view:
 ## Git
 
 Other Claude Code sessions work on this repo in parallel. `git pull` before starting, then commit **and push** each finished, build-passing step so everyone sees the current state. Small, focused commits with descriptive messages. Never commit `tools/handfont/scans/` or `out/` (they hold raw handwriting and are git-ignored).
+
+## Agent skills
+
+Refine before building: `/grill-me` (or `/grill-with-docs`) → `/to-spec` → `/to-tickets` → build. `/prototype` for design questions; `/review-spec-standards` before merging, on top of `npm run build`; `/retro` after a piece of work. Specs and tickets live in `.scratch/` (see `docs/agents/issue-tracker.md`); terms in `GLOSSARY.md`; decisions in `docs/DECISIONS.md`.
