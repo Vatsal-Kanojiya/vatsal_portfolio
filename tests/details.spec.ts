@@ -19,7 +19,7 @@ test('Copy email shows the address when the clipboard is unavailable', async ({ 
 
 test('the nav marks the section being read', async ({ page }) => {
   await page.goto('/');
-  for (const id of ['journey', 'work', 'projects', 'contact']) {
+  for (const id of ['projects', 'work', 'skills', 'contact']) {
     await page.evaluate((id) => {
       const el = document.getElementById(id)!;
       scrollTo({ top: el.offsetTop + Math.min(300, el.offsetHeight / 3) - innerHeight * 0.45, behavior: 'instant' });

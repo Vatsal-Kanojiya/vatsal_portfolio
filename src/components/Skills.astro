@@ -3,7 +3,7 @@ import profile from '../data/profile.json';
 import SectionHead from './SectionHead.astro';
 ---
 <section id="skills" class="mx-auto max-w-5xl px-6 py-28">
-  <SectionHead index="05" eyebrow="Toolkit" title="What I reach for." />
+  <SectionHead index="03" eyebrow="Toolkit" title="What I reach for." />
   <dl class="divide-y divide-line border-y border-line">
     {profile.skills.map((g, i) => (
       <div class="grid gap-3 py-6 md:grid-cols-[12rem_1fr]" data-reveal style={`--d:${i * 50}ms`}>

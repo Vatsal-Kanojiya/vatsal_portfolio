@@ -1,10 +1,11 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
 import ViewSwitch from './ViewSwitch.astro';
+import profile from '../data/profile.json';
 const links = [
-  { href: '/#journey', label: 'Journey' },
-  { href: '/#work', label: 'Work' },
   { href: '/#projects', label: 'Projects' },
+  { href: '/#work', label: 'Work' },
+  { href: '/#skills', label: 'Skills' },
   { href: '/#contact', label: 'Contact' },
 ];
 ---
@@ -16,6 +17,7 @@ const links = [
         {links.map((l) => (
           <li><a href={l.href} data-section={l.href.split('#')[1]} class="rounded-full px-3 py-1.5 text-sm text-muted transition hover:bg-accent-soft hover:text-ink aria-[current=true]:text-ink aria-[current=true]:bg-accent-soft/70">{l.label}</a></li>
         ))}
+        <li><a href={profile.links.resume} download class="rounded-full px-3 py-1.5 text-sm text-muted transition hover:bg-accent-soft hover:text-ink">Résumé</a></li>
       </ul>
       <ViewSwitch />
       <ThemeToggle />
