@@ -22,7 +22,8 @@ Astro 7 (static output) + Tailwind CSS v4 (`@tailwindcss/vite`). No client frame
 
 - `src/data/profile.json`: name, headline, stats, skills, the "How I work" steps, links
 - `src/content/{journey,experience,projects}/*.md`: one file per entry. The schema is in `src/content.config.ts`. `hidden: true` hides an entry.
-  - Projects with `kind: showcase` get a page at `/projects/<file-name>/`. `kind: early` are 2023 projects shown as small cards linking to GitHub.
+  - Projects with `kind: showcase` are the flagship cards; `kind: more` sit in the collapsible "More client work" block. Both get a page at `/projects/<file-name>/`. `kind: early` (2023 work) is currently hidden.
+  - Card fields: `statusLabel` (free-text status pill), `points` (2–3 highlights, written mechanism → rule → failure prevented), `note` (one honest line, e.g. how it was built).
 - `src/components/`: one component per home-page section. `src/pages/projects/[slug].astro` is the project page.
 - `src/styles/global.css`: **design tokens**. Colours are CSS variables on `:root` and `[data-theme="dark"]`, mapped to Tailwind via `@theme inline` (`bg-bg`, `text-ink`, `text-muted`, `border-line`, `text-accent`, `bg-band`, …). Always use tokens, never hard-coded colours, so themes and views keep working.
 - `src/layouts/Base.astro`: sets the theme before paint (localStorage `theme`, else the system preference), adds the `js` class, and runs the `[data-reveal]` scroll-reveal observer.

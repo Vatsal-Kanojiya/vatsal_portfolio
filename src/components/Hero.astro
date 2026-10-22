@@ -32,7 +32,7 @@ const [first, ...rest] = profile.name.split(' ');
         <Scribble text={profile.paper.notes.hero} arrow="left" class="absolute top-0 left-[11.5rem] w-max sm:left-[14rem] md:left-[18.5rem]" />
       </div>
       <p class="mt-6 font-mono text-sm uppercase tracking-[.18em] text-muted" data-reveal style="--d:160ms">
-        {profile.role} · {profile.location.split(',')[0]} · <time id="local-time" class="text-ink">--:--</time> IST
+        {profile.location.split(',')[0]} · <time id="local-time" class="text-ink">--:--</time> IST
       </p>
       <p class="mt-8 max-w-xl font-display text-2xl leading-snug italic sm:text-3xl" data-reveal style="--d:240ms">{profile.headline}</p>
       <p class="mt-5 max-w-xl text-lg leading-relaxed text-muted" data-reveal style="--d:320ms">{profile.intro}</p>
