@@ -3,7 +3,8 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import ProjectVisual from '../../components/ProjectVisual.astro';
-import { visible } from '../../lib/site';
+import { visible, ghost } from '../../lib/site';
+import profile from '../../data/profile.json';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects', (p) => visible(p) && p.data.kind === 'showcase')).sort((a, b) => a.data.order - b.data.order);
@@ -13,38 +14,68 @@ export async function getStaticPaths() {
 const { project, next, index } = Astro.props;
 const { data } = project;
 const { Content } = await render(project);
+// Reading time from everything on the page a reader would read (~220 words per minute)
+const words = [project.body ?? '', data.summary, ...data.features.flatMap((f) => [f.title, f.text])].join(' ').split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 220));
+// Search engines: describe the project as software, with a breadcrumb back to the projects list
+const pageUrl = new URL(`/projects/${project.id}/`, Astro.site).href;
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': data.repo ? 'SoftwareSourceCode' : 'CreativeWork',
+    name: data.title,
+    description: data.summary,
+    url: pageUrl,
+    ...(data.repo && { codeRepository: data.repo }),
+    ...(data.live && { sameAs: data.live }),
+    keywords: [...data.platforms, ...data.stack].join(', '),
+    author: { '@type': 'Person', name: profile.name, url: Astro.site?.href },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href },
+      { '@type': 'ListItem', position: 2, name: 'Projects', item: new URL('/#projects', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: data.title, item: pageUrl },
+    ],
+  },
+];
 ---
-<Base title={data.title} description={data.summary}>
+<Base title={data.title} description={data.summary} structuredData={structuredData}>
   <article class="mx-auto max-w-4xl px-6 pt-32 pb-20">
-    <a href="/#projects" class="font-mono text-xs uppercase tracking-[.2em] text-muted transition hover:text-accent">← All projects</a>
+    <div class="flex items-baseline justify-between gap-4 font-mono text-xs uppercase tracking-[.2em] text-muted">
+      <a href="/#projects" class="transition hover:text-accent print:hidden">← All projects</a>
+      <p>{minutes} min read</p>
+    </div>
 
     <header class="mt-10">
       <h1 class="font-display text-5xl leading-[1.02] tracking-tight sm:text-7xl" data-reveal>{data.title}</h1>
       <p class="mt-5 max-w-2xl font-display text-2xl italic text-accent" data-reveal style="--d:80ms">{data.tagline}</p>
       <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted" data-reveal style="--d:120ms">{data.summary}</p>
       <ul class="mt-8 flex flex-wrap gap-1.5" data-reveal style="--d:160ms">
-        {data.platforms.map((p) => <li class="rounded-full bg-accent px-3 py-1 font-mono text-xs text-bg">{p}</li>)}
-        {data.stack.map((s) => <li class="rounded-full border border-line px-3 py-1 font-mono text-xs text-muted">{s}</li>)}
+        {data.platforms.map((p) => <li class="ui-pill rounded-full bg-accent px-3 py-1 font-mono text-xs text-bg">{p}</li>)}
+        {data.stack.map((s) => <li class="ui-pill rounded-full border border-line px-3 py-1 font-mono text-xs text-muted">{s}</li>)}
       </ul>
       <div class="mt-8 flex flex-wrap gap-3" data-reveal style="--d:240ms">
         {data.live
-          ? <a href={data.live} target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition hover:bg-accent">Open live app ↗</a>
-          : <span class="inline-flex items-center gap-2 rounded-full border border-dashed border-line px-6 py-3 text-sm text-muted">Live demo coming soon</span>}
-        {data.repo && <a href={data.repo} target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-medium transition hover:border-accent hover:text-accent">View source on GitHub ↗</a>}
+          ? <a href={data.live} target="_blank" rel="noopener" class="ui-pill ui-btn inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition hover:bg-accent">Open live app ↗</a>
+          : <span class="ui-pill inline-flex items-center gap-2 rounded-full border border-dashed border-line px-6 py-3 text-sm text-muted">Live demo coming soon</span>}
+        {data.repo && <a href={data.repo} target="_blank" rel="noopener" class="ui-pill inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-medium transition hover:border-accent hover:text-accent">View source on GitHub ↗</a>}
       </div>
     </header>
 
-    <div class="mt-14 overflow-hidden rounded-3xl border border-line" data-reveal>
+    <div class="ui-card mt-14 overflow-hidden rounded-3xl border border-line" data-reveal>
       {data.cover
         ? <Image src={data.cover} alt={`${data.title} screenshot`} widths={[800, 1600]} sizes="(min-width: 896px) 56rem, 100vw" class="w-full" loading="eager" />
         : <ProjectVisual title={data.title} seed={index + 3} class="aspect-[16/8] w-full" />}
     </div>
 
     {data.highlights.length > 0 && (
-      <dl class="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
+      <dl class="ui-card mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
         {data.highlights.map((h, i) => (
           <div class="bg-surface p-6" data-reveal style={`--d:${i * 80}ms`}>
-            <dd class="font-display text-4xl tracking-tight text-accent">{h.value}</dd>
+            <dd class="ui-num font-display text-4xl tracking-tight text-accent" data-ghost={ghost(h.value, 7)}>{h.value}</dd>
             <dt class="mt-2 text-sm leading-snug text-muted">{h.label}</dt>
           </div>
         ))}
@@ -56,7 +87,7 @@ const { Content } = await render(project);
         <h2 class="font-display text-4xl tracking-tight" data-reveal>What it does</h2>
         <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {data.features.map((f, i) => (
-            <div class="rounded-2xl border border-line bg-surface p-6" data-reveal style={`--d:${(i % 3) * 70}ms`}>
+            <div class="ui-card ui-tape rounded-2xl border border-line bg-surface p-6" data-reveal style={`--d:${(i % 3) * 70}ms`}>
               <h3 class="font-medium tracking-tight text-accent">{f.title}</h3>
               <p class="mt-2 text-[15px] leading-relaxed text-muted">{f.text}</p>
             </div>
@@ -82,7 +113,7 @@ const { Content } = await render(project);
     )}
 
     {next.id !== project.id && (
-      <a href={`/projects/${next.id}/`} class="group mt-24 block rounded-3xl border border-line bg-surface p-8 transition hover:border-accent/50">
+      <a href={`/projects/${next.id}/`} class="ui-card group mt-24 block rounded-3xl border border-line bg-surface p-8 transition hover:border-accent/50">
         <p class="font-mono text-xs uppercase tracking-[.2em] text-muted">Next project</p>
         <p class="mt-3 font-display text-4xl tracking-tight transition group-hover:text-accent">{next.data.title} <span class="inline-block transition group-hover:translate-x-2">→</span></p>
       </a>

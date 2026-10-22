@@ -5,6 +5,17 @@
 	root * /srv/portfolio
 	encode zstd gzip
 	header /_astro/* Cache-Control "public, max-age=31536000, immutable"
+	# Security headers. The page CSP (hashed scripts/styles) ships as a <meta> tag from Astro;
+	# frame-ancestors only works as a header, so it lives here.
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()"
+		Cross-Origin-Opener-Policy "same-origin"
+		Content-Security-Policy "frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+		-Server
+	}
 	file_server
 	handle_errors {
 		rewrite * /404.html

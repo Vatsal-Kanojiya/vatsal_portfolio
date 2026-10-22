@@ -2,10 +2,25 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Not found">
-  <section class="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center px-6 text-center">
-    <p class="font-mono text-sm text-accent">404</p>
-    <h1 class="mt-4 font-display text-5xl tracking-tight">This page drifted off.</h1>
-    <p class="mt-4 text-muted">It may have moved, or never existed.</p>
-    <a href="/" class="mt-8 rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition hover:bg-accent">Back home</a>
+  <section class="mx-auto flex min-h-[80vh] max-w-xl flex-col items-center justify-center px-6 pt-24 text-center">
+    <!-- The request that missed, as a backend engineer would read it in a log -->
+    <div class="ui-card w-full max-w-md overflow-hidden rounded-2xl border border-line bg-surface text-left font-mono text-[13px] leading-relaxed" aria-label="Request log">
+      <p class="border-b border-line px-4 py-2 text-[11px] uppercase tracking-[.18em] text-muted">request log</p>
+      <div class="space-y-1 px-4 py-3">
+        <p class="break-all"><span class="text-muted">→</span> GET <span id="req-path">/</span> <span class="text-muted">HTTP/2</span></p>
+        <p><span class="text-accent">←</span> <span class="text-accent">404</span> Not Found <span class="text-muted">· no route matched</span></p>
+      </div>
+    </div>
+    <h1 class="mt-10 font-display text-5xl tracking-tight">This page drifted off.</h1>
+    <p class="mt-4 text-muted">It may have moved, or never existed. Everything that does exist is one click away.</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="/" class="ui-pill ui-btn rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition hover:bg-accent">Back home</a>
+      <a href="/#projects" class="ui-pill rounded-full border border-line bg-surface px-6 py-3 text-sm font-medium transition hover:border-accent hover:text-accent">See projects</a>
+    </div>
   </section>
 </Base>
+
+<script>
+  const el = document.getElementById('req-path');
+  if (el) el.textContent = decodeURI(location.pathname + location.search).slice(0, 120);
+</script>

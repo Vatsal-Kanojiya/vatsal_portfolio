@@ -1,0 +1,187 @@
+/* =====================================================================
+   PAPER VIEW: a handwritten notebook over the same content.
+   Opt-in via the view switch or ?view=paper. Editorial is untouched.
+
+   Swappable parts, each in one place:
+     - page pattern ......... --page (pick one of the --pattern-* tokens)
+     - inks / paper colours . the two token blocks below (light, dark)
+     - fonts ................ --ff-* tokens
+     - margin notes ......... profile.json → paper.notes (Scribble.astro)
+     - hero doodle .......... PaperSketch.astro
+   Hook classes used by components (view-agnostic, so future views can style them too):
+     .ui-card  boxes        .ui-pill  pill shapes   .ui-btn  primary buttons
+     .ui-index section no.  .ui-dot   timeline dots .ui-tape taped-on cards
+     .ui-photo photos       .doodle-underline       .scribble (margin notes)
+   ===================================================================== */
+
+:root[data-view="paper"] {
+  /* Fonts. Caveat for text and headings; Reenie Beanie only for short scribbles. */
+  --ff-sans: "Caveat Variable", "Segoe Print", "Bradley Hand", cursive;
+  --ff-display: var(--ff-sans);
+  --ff-mono: var(--ff-sans);
+  --ff-code: "JetBrains Mono Variable", ui-monospace, monospace;
+  --ff-scribble: "Reenie Beanie", "Caveat Variable", cursive;
+  --tracking-tight: 0em;
+
+  /* Paper + inks (light): cream page, blue-black ink, red pen, blue ballpoint, yellow highlighter */
+  --bg: #f7f3e8;
+  --surface: #fffdf6;
+  --ink: #1f2a48;
+  --muted: #555c6d;
+  --line: #d6ccb8;
+  --accent: #b8321f;
+  --accent-soft: #f9e79b;
+  --warm: #2f5fb3;
+  --band: #dcc5a0;
+  --band-ink: #2b2216;
+  --band-accent: #8f2a17;
+  --grain: .07;
+  color-scheme: light;
+
+  /* Paper-only details */
+  --rule: color-mix(in oklab, var(--warm) 27%, transparent);
+  --margin-rule: color-mix(in oklab, var(--accent) 45%, transparent);
+  --scribble: var(--warm);
+  --tape: color-mix(in oklab, #e9d58a 70%, transparent);
+  --shadow: color-mix(in oklab, var(--ink) 14%, transparent);
+  --doodle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8C40 3 80 4 120 6s52 1 76-3M6 10c50-4 110-4 186-2' fill='none' stroke='%23b8321f' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+
+  /* Hand-drawn shapes: uneven corner radii read as drawn, not ruled */
+  --wobble: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --wobble-pill: 2.2rem 1.4rem 2rem 1.2rem / 1.2rem 2rem 1.4rem 2.2rem;
+  --wobble-dot: 46% 54% 42% 58% / 55% 45% 58% 42%;
+
+  /* Page patterns. Swap --page to change the paper. */
+  --margin-x: max(.6rem, calc(50% - 33rem));
+  --pattern-dots: radial-gradient(circle, var(--rule) 1.1px, transparent 1.6px) 0 0 / 1.5rem 1.5rem;
+  --pattern-ruled:
+    linear-gradient(90deg, transparent var(--margin-x), var(--margin-rule) var(--margin-x), var(--margin-rule) calc(var(--margin-x) + 1.5px), transparent calc(var(--margin-x) + 1.5px)),
+    linear-gradient(to bottom, transparent calc(2rem - 1px), var(--rule) calc(2rem - 1px)) 0 0 / 100% 2rem;
+  --pattern-grid:
+    linear-gradient(to right, var(--rule) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem,
+    linear-gradient(to bottom, var(--rule) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem;
+  --pattern-plain: none;
+  --page: var(--pattern-dots);
+}
+
+/* Dark: a black-paper notebook written in gel pens */
+:root[data-view="paper"][data-theme="dark"] {
+  --bg: #191b20;
+  --surface: #21242b;
+  --ink: #ece6d8;
+  --muted: #a9a69d;
+  --line: #3a3e48;
+  --accent: #ff8a73;
+  --accent-soft: #3b3420;
+  --warm: #8fb4ff;
+  --band: #2b2419;
+  --band-ink: #ecdfc6;
+  --band-accent: #f2a66c;
+  --grain: .06;
+  --rule: color-mix(in oklab, var(--warm) 22%, transparent);
+  --tape: color-mix(in oklab, #c9b77a 28%, transparent);
+  --shadow: color-mix(in oklab, #000 45%, transparent);
+  --doodle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8C40 3 80 4 120 6s52 1 76-3M6 10c50-4 110-4 186-2' fill='none' stroke='%23ff8a73' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  color-scheme: dark;
+}
+
+/* ---- Page & type ---- */
+[data-view="paper"] body {
+  background: var(--page), var(--bg);
+  font-weight: 500;
+  /* Caveat has a small x-height: size it up to match the Editorial body, so layouts keep their rhythm */
+  font-size-adjust: ex-height .5;
+  font-synthesis: none;
+}
+[data-view="paper"] :is(em, i, .italic) { font-style: normal; }
+[data-view="paper"] :is(h1, h2, h3, .font-display) { font-weight: 700; }
+/* Handwriting needs more room between lines than the tight Editorial headings */
+[data-view="paper"] h1 { line-height: 1.02; padding-bottom: .2em; }
+[data-view="paper"] :is(h2, h3, h4) em { color: var(--accent); }
+/* Labels that are uppercase + tracked in Editorial read better as plain pencil notes */
+[data-view="paper"] .font-mono { text-transform: none; letter-spacing: .01em; }
+
+/* Doodled underlines under emphasised heading words (and the hero name) */
+[data-view="paper"] :is(h2 em, .doodle-underline) {
+  background: var(--doodle) no-repeat 0 100% / 100% .28em;
+  padding-bottom: .12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+[data-view="paper"] .doodle-underline { animation: paper-underline 1s .9s cubic-bezier(.6,.1,.3,1) both; }
+@keyframes paper-underline { from { background-size: 0 .28em; } }
+
+/* ---- Hand-drawn shapes ---- */
+[data-view="paper"] .ui-card { border-radius: var(--wobble); box-shadow: 2px 3px 0 var(--shadow); }
+[data-view="paper"] .ui-card:is(:hover, :focus-visible) { box-shadow: 4px 6px 0 var(--shadow); }
+[data-view="paper"] .ui-pill { border-radius: var(--wobble-pill); }
+[data-view="paper"] .ui-dot { border-radius: var(--wobble-dot); }
+[data-view="paper"] .ui-btn { box-shadow: 2px 3px 0 var(--shadow); }
+/* Cards sit slightly askew, like notes pinned to a page */
+[data-view="paper"] :nth-child(odd of .ui-card) { rotate: -.5deg; }
+[data-view="paper"] :nth-child(even of .ui-card) { rotate: .45deg; }
+[data-view="paper"] #view-menu.ui-card { rotate: none; }
+
+/* A strip of tape on cards that ask for it */
+[data-view="paper"] .ui-tape { position: relative; }
+[data-view="paper"] .ui-tape::before {
+  content: ""; position: absolute; top: -.65rem; left: 50%; width: 5.5rem; height: 1.3rem;
+  translate: -50% 0; rotate: -3deg; background: var(--tape);
+  box-shadow: 0 1px 1px var(--shadow); pointer-events: none;
+}
+[data-view="paper"] :nth-child(even of .ui-tape)::before { rotate: 4deg; left: 40%; }
+
+/* Section number circled in pen */
+[data-view="paper"] .ui-index {
+  display: inline-grid; place-items: center; min-width: 2.1em; padding: .05em .45em;
+  border: 1.5px solid currentColor; border-radius: var(--wobble-dot);
+}
+
+/* Photos become taped-in prints */
+[data-view="paper"] .ui-photo {
+  border-radius: 2px; border: .55rem solid var(--surface); border-bottom-width: 2rem;
+  rotate: -2deg; box-shadow: 3px 5px 0 var(--shadow);
+}
+
+/* ---- Margin notes (Reenie Beanie, short scribbles only) ---- */
+.scribble {
+  display: inline-flex; align-items: flex-end; gap: .2rem;
+  font-family: var(--ff-scribble); font-weight: 400; font-size: 1.6rem; line-height: 1;
+  letter-spacing: .01em; color: var(--scribble); rotate: -4deg;
+  font-size-adjust: none; text-transform: none;
+}
+.scribble-arrow { width: 2.6rem; height: auto; flex: none; }
+@media (max-width: 639px) { .scribble { font-size: 1.35rem; } .scribble-arrow { width: 2.1rem; } }
+.scribble-left { flex-direction: row; }
+.scribble-down { flex-direction: column-reverse; align-items: flex-start; }
+.scribble-down .scribble-arrow { width: 1.7rem; margin-left: 1.5rem; }
+
+/* ---- Hero sketch ---- */
+.sketch { color: var(--ink); font-size-adjust: none; }
+.sketch .box { stroke: var(--ink); }
+.sketch .arrow { stroke: var(--accent); }
+.sketch .dashed { stroke-dasharray: 6 7; }
+.sketch-label { fill: var(--ink); font-family: var(--ff-display); }
+.sketch-note { fill: var(--scribble); font-family: var(--ff-scribble); }
+@media (prefers-reduced-motion: no-preference) {
+  .sketch .ink:not(.dashed) { stroke-dasharray: 1; stroke-dashoffset: 1; animation: paper-draw .7s var(--d, 0s) ease-out forwards; }
+  .sketch .dashed, .sketch text { opacity: 0; animation: paper-fade .6s var(--d, 0s) ease-out forwards; }
+  .scribble-arrow path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: paper-draw .6s 1.2s ease-out forwards; }
+}
+@keyframes paper-draw { to { stroke-dashoffset: 0; } }
+@keyframes paper-fade { to { opacity: 1; } }
+
+/* ---- Sections ---- */
+/* The dark band becomes a kraft-paper divider page */
+[data-view="paper"] .bg-band > div { --muted: color-mix(in oklab, var(--band-ink) 82%, var(--band)); }
+[data-view="paper"] .bg-band .opacity-70 { opacity: .9; }
+
+/* Long-form case-study pages */
+[data-view="paper"] .prose { font-size: 1.2rem; line-height: 1.75; }
+[data-view="paper"] .prose h2 { font-size: 2.2rem; }
+[data-view="paper"] .prose code { font-size-adjust: none; font-size: .78em; }
+[data-view="paper"] .prose li::before { height: 2px; border-radius: 2px; rotate: -8deg; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-view="paper"] .doodle-underline { animation: none; }
+}

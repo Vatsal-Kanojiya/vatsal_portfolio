@@ -26,6 +26,14 @@
     { "group": "Tooling", "items": ["Django tests / unittest", "Git", "GitHub Actions", "Docker Compose", "Gunicorn", "Nginx", "Linux", "AWS EC2 / S3"] },
     { "group": "Integrations", "items": ["Razorpay", "WhatsApp Business API", "FCM", "Zoom", "Biometric devices", "SMS / email gateways"] }
   ],
+  "paper": {
+    "notes": {
+      "hero": "hi, that's me!",
+      "journey": "where it all began",
+      "projects": "open one, it's all in there",
+      "contact": "say hi!"
+    }
+  },
   "process": [
     { "step": "Spec", "text": "Write acceptance criteria before a line of code. The spec is the contract — for me and for the agent." },
     { "step": "Build", "text": "Claude Code agents implement against the spec. I steer architecture, data model and edge cases." },

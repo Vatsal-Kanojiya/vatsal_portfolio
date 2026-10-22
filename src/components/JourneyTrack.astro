@@ -1,0 +1,47 @@
+---
+// Vertical timeline whose line "fills" as you scroll through the journey.
+// Pure CSS where scroll-driven animations exist; a few lines of JS elsewhere. No framework needed.
+---
+<div class="journey-track relative">
+  <div class="absolute top-2 bottom-2 left-[7px] w-px bg-line md:left-[calc(9rem+7px)]"></div>
+  <div class="journey-fill absolute top-2 bottom-2 left-[7px] w-px origin-top bg-accent md:left-[calc(9rem+7px)]"></div>
+  <slot />
+</div>
+
+<style>
+  /* Starts filling when the track's top reaches 70% down the viewport; full when its bottom reaches 60% */
+  .journey-track { view-timeline: --journey block; }
+  .journey-fill { transform: scaleY(0); }
+  @supports (animation-timeline: view()) {
+    /* Longhands on purpose: the CSS minifier drops an `animation` shorthand combined with a timeline */
+    .journey-fill {
+      animation-name: journey-fill; animation-timing-function: linear; animation-fill-mode: both;
+      animation-timeline: --journey; animation-range: cover 30vh exit 40vh;
+    }
+  }
+  @keyframes journey-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .journey-fill { animation-name: none; transform: none; }
+  }
+</style>
+
+<script>
+  // Fallback for browsers without scroll-driven animations
+  if (!CSS.supports('animation-timeline: view()') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (const track of document.querySelectorAll<HTMLElement>('.journey-track')) {
+      const fill = track.querySelector<HTMLElement>('.journey-fill');
+      if (!fill) continue;
+      let queued = false;
+      const update = () => {
+        queued = false;
+        const r = track.getBoundingClientRect(), vh = innerHeight;
+        const p = Math.min(1, Math.max(0, (0.7 * vh - r.top) / (0.1 * vh + r.height)));
+        fill.style.transform = `scaleY(${p})`;
+      };
+      const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+      addEventListener('scroll', queue, { passive: true });
+      addEventListener('resize', queue);
+      update();
+    }
+  }
+</script>

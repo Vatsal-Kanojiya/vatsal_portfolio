@@ -1,0 +1,73 @@
+---
+// Terminal view's hero background: "code rain" whose columns spell out the real stack.
+// Shown only in the Terminal view; the loop pauses whenever it isn't on screen.
+---
+<canvas id="code-rain" data-only="terminal" class="print:hidden absolute inset-0 -z-10 h-full w-full opacity-70 md:opacity-100" aria-hidden="true"></canvas>
+<div data-only="terminal" class="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,var(--bg)_20%,color-mix(in_oklab,var(--bg)_70%,transparent)_55%,transparent_85%)] max-md:bg-[linear-gradient(var(--bg),color-mix(in_oklab,var(--bg)_55%,transparent))]"></div>
+
+<script>
+  const canvas = document.getElementById('code-rain') as HTMLCanvasElement | null;
+  const ctx = canvas?.getContext('2d');
+  if (canvas && ctx) {
+    // Tokens from the actual stack (profile, projects), streamed one character per row
+    const TOKENS = ['SELECT', 'select_for_update()', '@shared_task', '409', 'BEGIN;', 'COMMIT;', 'ROLLBACK;', 'transaction.atomic',
+      'pgvector', 'idempotency_key', 'celery -A', 'frappe.db', 'GET /api/', 'POST 201', 'EXPLAIN ANALYZE', 'django', 'DRF', 'redis',
+      'tsvector', 'def', 'return', 'migrate', 'CREATE INDEX', 'bulk_create', '202', 'JOIN', 'WHERE', 'prefetch_related'];
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const root = document.documentElement;
+    const css = (v: string) => getComputedStyle(root).getPropertyValue(v).trim();
+    const shown = () => root.dataset.view === 'terminal';
+    let w = 0, h = 0, fs = 16, raf = 0, running = false, last = 0;
+    let cols: { y: number; token: string; i: number; speed: number }[] = [];
+    let accent = '';
+
+    const pick = () => TOKENS[Math.floor(Math.random() * TOKENS.length)];
+    const colours = () => { accent = css('--accent'); };
+    const resize = () => {
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      fs = w < 768 ? 14 : 16;
+      cols = Array.from({ length: Math.ceil(w / fs) }, () => ({ y: -Math.random() * 40, token: pick(), i: 0, speed: 0.35 + Math.random() * 0.65 }));
+      ctx.clearRect(0, 0, w, h);
+    };
+    const step = () => {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0,0,0,0.09)';
+      ctx.fillRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.font = `${fs}px "JetBrains Mono Variable", ui-monospace, monospace`;
+      cols.forEach((c, x) => {
+        const before = Math.floor(c.y);
+        c.y += c.speed;
+        if (Math.floor(c.y) === before || c.y < 0) return;
+        const ch = c.token[c.i % c.token.length];
+        c.i++;
+        ctx.fillStyle = accent; ctx.globalAlpha = 0.55;
+        ctx.fillText(ch, x * fs, c.y * fs);
+        if (c.i % c.token.length === 0) { c.token = pick(); c.y += 1; } // a gap between tokens
+        if (c.y * fs > h + fs * 4) { c.y = -Math.random() * 20; c.token = pick(); c.i = 0; }
+      });
+      ctx.globalAlpha = 1;
+    };
+    // ~24 fps is plenty for falling glyphs and keeps the CPU calm
+    const loop = (t: number) => { raf = requestAnimationFrame(loop); if (t - last < 42) return; last = t; step(); };
+    const still = () => { ctx.clearRect(0, 0, w, h); for (let i = 0; i < 160; i++) step(); };
+    const start = () => { if (!running && !reduce && shown() && !document.hidden) { running = true; raf = requestAnimationFrame(loop); } };
+    const stop = () => { running = false; cancelAnimationFrame(raf); };
+
+    colours(); resize();
+    if (reduce && shown()) still(); else start();
+    addEventListener('resize', () => { resize(); if (reduce && shown()) still(); });
+    new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop())).observe(canvas);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+    new MutationObserver(() => {
+      colours(); ctx.clearRect(0, 0, w, h);
+      if (!shown()) return stop();
+      // The canvas was hidden (no size) before this view showed: measure it now
+      if (canvas.clientWidth !== w || canvas.clientHeight !== h) resize();
+      reduce ? still() : start();
+    }).observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-view'] });
+  }
+</script>

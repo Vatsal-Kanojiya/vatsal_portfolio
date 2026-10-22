@@ -1,0 +1,35 @@
+---
+// Display view's hero: a live Bengaluru (IST) clock on a segment-display module.
+// Decorative (the role line already gives the time in text), so hidden from screen readers.
+---
+<div data-only="display" class="lcd-panel ui-card mx-auto w-full max-w-[26rem] rounded-2xl border border-line bg-surface p-6" aria-hidden="true">
+  <p class="flex items-center justify-between font-mono text-[11px] uppercase tracking-[.2em] text-muted">
+    <span>Bengaluru · IST</span><span class="lcd-led"></span>
+  </p>
+  <p class="lcd-clock mt-5 flex items-baseline justify-center">
+    <span class="lcd-7" data-ghost="88"><span id="lcd-h">--</span></span><span class="lcd-7 lcd-colon">:</span><span class="lcd-7" data-ghost="88"><span id="lcd-m">--</span></span><span class="lcd-7 lcd-sec" data-ghost="88"><span id="lcd-s">--</span></span>
+  </p>
+  <p class="mt-4 text-center"><span class="lcd-14 lcd-date" data-ghost="~~~ ~~ ~~~"><span id="lcd-d">--- -- ---</span></span></p>
+</div>
+
+<script>
+  const $ = (id: string) => document.getElementById(id);
+  const h = $('lcd-h'), m = $('lcd-m'), s = $('lcd-s'), d = $('lcd-d');
+  if (h && m && s && d) {
+    const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' });
+    let timer = 0;
+    const tick = () => {
+      const p = Object.fromEntries(fmt.formatToParts(new Date()).map((x) => [x.type, x.value]));
+      h.textContent = p.hour; m.textContent = p.minute; s.textContent = p.second;
+      d.textContent = `${p.weekday} ${p.day} ${p.month}`.toUpperCase();
+    };
+    // Only tick while the Display view is showing
+    const sync = () => {
+      clearInterval(timer);
+      if (document.documentElement.dataset.view === 'display' && !document.hidden) { tick(); timer = window.setInterval(tick, 1000); }
+    };
+    sync();
+    document.addEventListener('visibilitychange', sync);
+    new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['data-view'] });
+  }
+</script>

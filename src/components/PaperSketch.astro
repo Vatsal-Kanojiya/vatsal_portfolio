@@ -1,0 +1,50 @@
+---
+// Paper view's hero doodle: a hand-drawn sketch of the stack, drawn in like pen on paper.
+// The Editorial view shows its flow-field canvas here instead. Only names stack items from profile.json.
+---
+<svg data-only="paper" class="sketch mx-auto w-full max-w-[26rem]" viewBox="0 0 420 440" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  role="img" aria-label="Sketch: a client sends a request to Django and DRF, which reads and writes PostgreSQL and hands background jobs to Celery.">
+  <defs>
+    <filter id="sketchy" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" />
+      <feDisplacementMap in="SourceGraphic" scale="2.6" />
+    </filter>
+  </defs>
+
+  <g filter="url(#sketchy)" stroke-width="2.2">
+    <!-- client -->
+    <path class="ink box" style="--d:.2s" pathLength="1" d="M42 33C80 30 130 31 168 34C170 52 171 72 169 90C128 93 82 92 41 91C39 72 40 52 44 31" />
+    <!-- request -->
+    <path class="ink arrow" style="--d:.7s" pathLength="1" d="M172 60C215 58 246 88 247 144" />
+    <path class="ink arrow" style="--d:1s" pathLength="1" d="M239 133L247 146L255 132" />
+    <!-- Django + DRF -->
+    <path class="ink box" style="--d:1.1s" pathLength="1" d="M152 156C210 151 280 152 338 155C341 178 340 200 337 221C280 224 210 224 153 222C150 200 150 178 154 154" />
+    <!-- response -->
+    <path class="ink arrow dashed" style="--d:1.6s" d="M148 202C104 200 86 152 92 102" />
+    <path class="ink arrow" style="--d:1.8s" pathLength="1" d="M84 113L92 99L100 112" />
+    <!-- queries -->
+    <path class="ink arrow" style="--d:1.9s" pathLength="1" d="M231 226C229 245 232 262 230 279" />
+    <path class="ink arrow" style="--d:2.1s" pathLength="1" d="M222 269L230 282L239 270" />
+    <!-- PostgreSQL -->
+    <path class="ink box" style="--d:2.2s" pathLength="1" d="M160 298C160 287 300 285 300 297C300 309 160 311 160 298" />
+    <path class="ink box" style="--d:2.4s" pathLength="1" d="M160 298C159 330 161 352 161 372C166 387 296 388 300 372C301 352 299 330 300 297" />
+    <!-- jobs -->
+    <path class="ink arrow" style="--d:2.6s" pathLength="1" d="M341 188C374 192 376 228 366 256" />
+    <path class="ink arrow" style="--d:2.8s" pathLength="1" d="M357 246L365 259L374 247" />
+    <!-- Celery -->
+    <path class="ink box" style="--d:2.9s" pathLength="1" d="M320 264C345 261 380 262 408 265C410 280 409 296 407 312C380 314 346 314 319 312C317 296 318 280 322 262" />
+  </g>
+
+  <g class="sketch-label" font-weight="600">
+    <text x="105" y="70" text-anchor="middle" font-size="28" style="--d:.5s">client</text>
+    <text x="245" y="197" text-anchor="middle" font-size="30" style="--d:1.4s">Django + DRF</text>
+    <text x="230" y="345" text-anchor="middle" font-size="28" style="--d:2.6s">PostgreSQL</text>
+    <text x="363" y="296" text-anchor="middle" font-size="26" style="--d:3.1s">Celery</text>
+  </g>
+  <g class="sketch-note">
+    <text x="236" y="84" font-size="24" transform="rotate(14 236 84)" style="--d:1s">request</text>
+    <text x="40" y="168" font-size="24" transform="rotate(-12 40 168)" style="--d:1.9s">JSON</text>
+    <text x="244" y="258" font-size="22" style="--d:2.2s">SQL</text>
+    <text x="366" y="340" text-anchor="middle" font-size="24" transform="rotate(-5 366 340)" style="--d:3.2s"><tspan x="366">background</tspan><tspan x="366" dy="20">jobs</tspan></text>
+  </g>
+</svg>

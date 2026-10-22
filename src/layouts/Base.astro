@@ -3,11 +3,21 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import profile from '../data/profile.json';
+import { views, defaultView } from '../lib/views';
 
-interface Props { title?: string; description?: string }
-const { title, description = profile.intro } = Astro.props;
+interface Props { title?: string; description?: string; /** Extra schema.org objects for this page */ structuredData?: object[] }
+const { title, description = profile.intro, structuredData = [] } = Astro.props;
 const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name} — ${profile.role}`;
 const ogImage = new URL('/og.png', Astro.site);
+// data-only="<view>" shows an element only in that view; data-hide="<view> …" hides it in those views.
+// Generated, so a new view needs no CSS for this.
+const viewOnlyCss = views
+  .map((v) => (v.id === defaultView
+    ? `html[data-view]:not([data-view="${v.id}"]) [data-only="${v.id}"]`
+    : `html:not([data-view="${v.id}"]) [data-only="${v.id}"]`) + `,html[data-view="${v.id}"] [data-hide~="${v.id}"]{display:none}`)
+  .join('');
+const viewIds = views.map((v) => v.id);
+const preloads = Object.fromEntries(views.map((v) => [v.id, v.preload ?? []]));
 const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -28,6 +38,10 @@ const person = {
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="me" href={profile.links.github} />
+    <link rel="me" href={profile.links.linkedin} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
@@ -42,14 +56,27 @@ const person = {
     <meta name="twitter:image" content={ogImage} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    {structuredData.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
     <meta name="theme-color" content="#f5f2ec" />
-    <script is:inline>
-      // Set theme + JS flag before paint to avoid a flash
+    <style is:inline set:html={viewOnlyCss}></style>
+    <script is:inline define:vars={{ viewIds, defaultView, preloads }}>
+      // Set theme, view + JS flag before paint to avoid a flash
       (function () {
-        var d = document.documentElement, t = null;
+        var d = document.documentElement, t = null, v = null;
         try { t = localStorage.getItem('theme'); } catch (e) {}
         if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         d.dataset.theme = t;
+        // View: ?view= (shareable link) wins and is remembered, then the saved choice, else the default
+        try { v = new URLSearchParams(location.search).get('view'); } catch (e) {}
+        if (viewIds.indexOf(v) > -1) { try { localStorage.setItem('view', v); } catch (e) {} }
+        else { v = null; try { v = localStorage.getItem('view'); } catch (e) {} }
+        if (viewIds.indexOf(v) < 0) v = defaultView;
+        d.dataset.view = v;
+        (preloads[v] || []).forEach(function (href) {
+          var l = document.createElement('link');
+          l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = ''; l.href = href;
+          document.head.appendChild(l);
+        });
         d.classList.add('js');
       })();
     </script>
@@ -60,10 +87,26 @@ const person = {
     <main id="main"><slot /></main>
     <Footer />
     <script>
+      import { email } from '../data/profile.json';
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
       }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
       document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+
+      // Mobile browser chrome takes the page colour of the current view and theme
+      const root = document.documentElement;
+      const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+      const syncChrome = () => { const bg = getComputedStyle(root).getPropertyValue('--bg').trim(); if (meta && bg) meta.content = bg; };
+      syncChrome();
+      new MutationObserver(syncChrome).observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-view'] });
+
+      // A hello for anyone who opens the dev tools
+      const accent = getComputedStyle(root).getPropertyValue('--accent').trim();
+      console.log(
+        `%cHi, fellow engineer 👋%c\n\nThis site is static Astro: no client framework, just HTML, CSS and a few small scripts.\nIt has four looks over the same content: try ?view=paper, ?view=terminal or ?view=display (or type "matrix").\n\nSay hello: ${email}`,
+        `font: 600 16px/1.6 system-ui, sans-serif; color: ${accent || '#2c6b5e'};`,
+        'font: 13px/1.6 system-ui, sans-serif;',
+      );
     </script>
   </body>
 </html>
