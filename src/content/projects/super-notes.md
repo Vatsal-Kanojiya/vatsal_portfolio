@@ -6,11 +6,16 @@ kind: showcase
 year: "2026"
 platforms: [Web, Android (first build)]
 stack: [Django, DRF, PostgreSQL, pgvector, Celery, Redis, Vue 3, Flutter]
-order: 1
+order: 4
 status: in-progress
+statusLabel: Runs locally · deploy pending
+note: "Built with Claude Code agents to my specs. I wrote the plans and acceptance criteria, and reviewed every diff."
+points:
+  - "Hybrid retrieval: pgvector similarity and Postgres full-text search, ranked together, and every answer cites the notes it came from."
+  - "Revision-based sync: an edit made against a stale revision gets a 409 instead of silently overwriting another device's changes."
+  - "One quota layer for every AI feature, with idempotency keys so a retried request is never counted twice."
 repo: https://github.com/Vatsal-Kanojiya/super_notes
 highlights:
-  - { value: "1,900+", label: "automated tests, backend and web" }
   - { value: "38", label: "API paths, one documented contract" }
   - { value: "340+", label: "design decisions written down" }
 features:
@@ -28,7 +33,7 @@ features:
 
 ## Under the hood, briefly
 
-- **Finding the right notes.** Search combines *meaning* (vector similarity) with *exact words* (full-text search), then merges both rankings. Retrieval quality is measured with a labelled question set rather than judged by eye.
+- **Finding the right notes.** Search combines *meaning* (vector similarity) with *exact words* (full-text search), then merges both rankings.
 - **Slow work runs in the background.** Reading files, indexing notes and writing answers happen in background jobs, so the app stays fast.
 - **Safe usage limits.** Every AI feature goes through one limits layer. Monthly quotas per user and system-wide caps are editable without a deploy, and a retried request is never counted twice.
 - **Built in versions.** V1 covered notes, sync, search and Ask. V2 added conversations, streaming, memory, formatting, smart paste, reminders and attachments. V3 is a native Flutter Android app, whose first build is done.

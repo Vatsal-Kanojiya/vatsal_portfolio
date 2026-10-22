@@ -6,6 +6,7 @@ kind: early
 year: "2023"
 stack: [Django, SQLite, HTML templates]
 order: 10
+hidden: true
 status: archived
 repo: https://github.com/Vatsal-Kanojiya/To_Do_List_Django
 ---

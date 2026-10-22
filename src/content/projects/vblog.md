@@ -6,6 +6,7 @@ kind: early
 year: "2023"
 stack: [Django, SQLite, Razorpay, HTML templates]
 order: 11
+hidden: true
 status: archived
 repo: https://github.com/Vatsal-Kanojiya/VBlog_Django
 ---

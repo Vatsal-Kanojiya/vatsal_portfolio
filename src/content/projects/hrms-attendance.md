@@ -2,12 +2,17 @@
 title: HR and Attendance
 tagline: Attendance that fills itself in overnight.
 summary: A customisation layer on Frappe and ERPNext HRMS for a services company with a mixed workforce. Staff punch in by biometric device or mobile, and the system turns raw punches into correct attendance without HR chasing it.
-kind: showcase
+kind: more
 year: "2026"
 platforms: [Web, Mobile API]
 stack: [Python, Frappe, ERPNext HRMS, MariaDB]
 order: 5
 status: in-progress
+statusLabel: In production · client work
+points:
+  - "Overnight jobs turn raw biometric and mobile punches into attendance, closing missing punches and handling leave and half-days."
+  - "Device punches are logged first and are safe to retry, so a repeated biometric message never double-counts."
+  - "Corrections keep what they replaced, so cancelling one restores the day exactly. All of it sits in hooks and overrides, with no changes to the framework core."
 highlights:
   - { value: "23", label: "documented business rules" }
   - { value: "3", label: "scheduled jobs that run overnight" }

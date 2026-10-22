@@ -14,11 +14,15 @@ const projects = defineCollection({
       summary: z.string(),
       stack: z.array(z.string()),
       order: z.number().default(99),
-      kind: z.enum(['showcase', 'early']).default('showcase'),
+      // showcase = flagship card; more = inside "More client work"; early = 2023 work
+      kind: z.enum(['showcase', 'more', 'early']).default('showcase'),
       year: z.string(),
       platforms: z.array(z.string()).default([]),
       features: z.array(z.object({ title: z.string(), text: z.string() })).default([]),
       status: z.enum(['live', 'in-progress', 'archived']).default('in-progress'),
+      statusLabel: z.string().optional(), // free text that overrides the status pill, e.g. "In production · client work"
+      note: z.string().optional(), // one honest line under the card, e.g. how it was built
+      points: z.array(z.string()).default([]), // 2–3 card highlights: mechanism → rule → failure prevented
       repo: z.url().optional(),
       live: z.url().optional(),
       cover: image().optional(),

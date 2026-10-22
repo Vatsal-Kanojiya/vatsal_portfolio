@@ -7,7 +7,7 @@ import { visible, ghost } from '../../lib/site';
 import profile from '../../data/profile.json';
 
 export async function getStaticPaths() {
-  const projects = (await getCollection('projects', (p) => visible(p) && p.data.kind === 'showcase')).sort((a, b) => a.data.order - b.data.order);
+  const projects = (await getCollection('projects', (p) => visible(p) && p.data.kind !== 'early')).sort((a, b) => a.data.order - b.data.order);
   return projects.map((p, i) => ({ params: { slug: p.id }, props: { project: p, next: projects[(i + 1) % projects.length], index: i } }));
 }
 
@@ -60,7 +60,7 @@ const structuredData = [
       <div class="mt-8 flex flex-wrap gap-3" data-reveal style="--d:240ms">
         {data.live
           ? <a href={data.live} target="_blank" rel="noopener" class="ui-pill ui-btn inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition hover:bg-accent">Open live app ↗</a>
-          : <span class="ui-pill inline-flex items-center gap-2 rounded-full border border-dashed border-line px-6 py-3 text-sm text-muted">Live demo coming soon</span>}
+          : <span class="ui-pill inline-flex items-center gap-2 rounded-full border border-dashed border-line px-6 py-3 text-sm text-muted">{data.statusLabel ?? 'Live demo coming soon'}</span>}
         {data.repo && <a href={data.repo} target="_blank" rel="noopener" class="ui-pill inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-medium transition hover:border-accent hover:text-accent">View source on GitHub ↗</a>}
       </div>
     </header>
@@ -72,7 +72,7 @@ const structuredData = [
     </div>
 
     {data.highlights.length > 0 && (
-      <dl class="ui-card mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
+      <dl class={`ui-card mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line ${data.highlights.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
         {data.highlights.map((h, i) => (
           <div class="bg-surface p-6" data-reveal style={`--d:${i * 80}ms`}>
             <dd class="ui-num font-display text-4xl tracking-tight text-accent" data-ghost={ghost(h.value, 7)}>{h.value}</dd>

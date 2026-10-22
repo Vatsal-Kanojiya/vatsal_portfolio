@@ -8,83 +8,79 @@ import profile from '../data/profile.json';
 
 const all = (await getCollection('projects', visible)).sort((a, b) => a.data.order - b.data.order);
 const showcase = all.filter((p) => p.data.kind === 'showcase');
-const early = all.filter((p) => p.data.kind === 'early');
+const more = all.filter((p) => p.data.kind === 'more');
 const statusLabel = { live: 'Live', 'in-progress': 'In progress', archived: 'Archived' } as const;
-
-// Growth strip: oldest to newest, with what each step added
-const steps = [
-  { title: 'To-Do List', year: '2023', added: 'Models, forms, templates' },
-  { title: 'VBlog', year: '2023', added: 'Auth, social features, payments' },
-  { title: 'Expense Tracker', year: '2026', added: 'Concurrency, background jobs, APIs, Docker' },
-  { title: 'Super Notes', year: '2026', added: 'AI search and chat, sync, mobile' },
-];
 ---
 <section id="projects" class="mx-auto max-w-5xl px-6 py-28">
-  <SectionHead index="03" eyebrow="Projects" title="Things I build<br/><em class='text-accent'>on my own time.</em>"
-    lead="Personal projects, built to production standards. Open one to see everything it does."
+  <SectionHead index="01" eyebrow="Projects" title="Systems in production,<br/><em class='text-accent'>and what I build after hours.</em>"
+    lead="Two client systems running in production and two products of my own. Client names are withheld; the engineering is shown in full."
     note={profile.paper.notes.projects} />
 
   <div class="space-y-8">
     {showcase.map(({ id, data }, i) => (
-      <a href={`/projects/${id}/`} class="ui-card group grid overflow-hidden rounded-3xl border border-line bg-surface transition duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_30px_60px_-30px_var(--accent)] md:grid-cols-[1fr_1.1fr]"
+      <article class="ui-card group relative grid overflow-hidden rounded-3xl border border-line bg-surface transition duration-500 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_30px_60px_-30px_var(--accent)] md:grid-cols-[1fr_1.4fr]"
         data-reveal style={`--d:${i * 80}ms`}>
-        <div class="relative aspect-[16/10] overflow-hidden md:aspect-auto md:min-h-80">
+        <div class="relative aspect-[16/9] overflow-hidden md:aspect-auto md:min-h-80">
           {data.cover
-            ? <Image src={data.cover} alt={`${data.title} screenshot`} widths={[640, 1280]} sizes="(min-width: 768px) 30rem, 100vw" class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" />
+            ? <Image src={data.cover} alt={`${data.title} screenshot`} widths={[640, 1280]} sizes="(min-width: 768px) 26rem, 100vw" class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" />
             : <ProjectVisual title={data.title} seed={i + 3} class="h-full w-full transition duration-700 group-hover:scale-[1.03]" />}
         </div>
         <div class="flex flex-col p-7 sm:p-9">
           <div class="mb-4 flex flex-wrap items-center gap-2">
             <span class="ui-pill inline-flex items-center gap-2 rounded-full border border-line px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted">
-              <span class={`size-1.5 rounded-full ${data.status === 'live' ? 'bg-accent' : 'bg-warm'}`}></span>{statusLabel[data.status]}
+              <span class={`size-1.5 rounded-full ${data.status === 'live' || data.statusLabel?.startsWith('In production') ? 'bg-accent' : 'bg-warm'}`}></span>{data.statusLabel ?? statusLabel[data.status]}
             </span>
-            {data.platforms.map((p) => <span class="ui-pill rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] text-accent">{p}</span>)}
           </div>
-          <h3 class="font-display text-3xl tracking-tight">{data.title}</h3>
+          <h3 class="font-display text-3xl tracking-tight">
+            <a href={`/projects/${id}/`} class="after:absolute after:inset-0">{data.title}</a>
+          </h3>
           <p class="mt-1 font-display text-xl italic text-accent">{data.tagline}</p>
-          <p class="mt-4 leading-relaxed text-muted">{data.summary}</p>
-          <ul class="mt-5 grid gap-x-4 gap-y-1.5 text-sm sm:grid-cols-2">
-            {data.features.slice(0, 6).map((f) => (
-              <li class="flex gap-2"><span class="mt-[.55em] h-px w-3 shrink-0 bg-accent"></span>{f.title}</li>
+          <ul class="mt-5 space-y-3 text-[15px] leading-relaxed">
+            {data.points.map((p) => (
+              <li class="flex gap-3"><span class="mt-[.7em] h-px w-3 shrink-0 bg-accent"></span><span>{p}</span></li>
             ))}
           </ul>
-          <span class="mt-auto pt-8 text-sm font-medium">See everything it does <span class="inline-block transition group-hover:translate-x-1">→</span></span>
+          {data.note && <p class="mt-5 text-sm leading-relaxed text-muted italic">{data.note}</p>}
+          <ul class="mt-6 flex flex-wrap gap-1.5">
+            {data.stack.map((s) => <li class="ui-pill rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px] text-accent">{s}</li>)}
+          </ul>
+          <div class="mt-auto flex flex-wrap items-center gap-x-6 gap-y-2 pt-8 text-sm font-medium">
+            <span>Read the case study <span class="inline-block transition group-hover:translate-x-1">→</span></span>
+            {data.repo && <a href={data.repo} target="_blank" rel="noopener" class="relative z-10 text-muted transition hover:text-accent">Source on GitHub ↗</a>}
+          </div>
         </div>
-      </a>
+      </article>
     ))}
   </div>
 
-  <!-- Growth -->
-  <div class="mt-24" data-reveal>
-    <p class="font-mono text-xs uppercase tracking-[.2em] text-accent">Three years of growth</p>
-    <h3 class="mt-3 font-display text-3xl tracking-tight sm:text-4xl">Where it started, <em class="text-accent">and where it is now.</em></h3>
-  </div>
-  <div class="relative mt-10">
-  <span class="absolute top-[7px] right-0 left-0 hidden h-px bg-gradient-to-r from-line via-accent/60 to-accent sm:block"></span>
-  <ol class="relative grid gap-6 sm:grid-cols-4">
-    {steps.map((s, i) => (
-      <li class="relative pl-6 sm:pl-0 sm:pt-8" data-reveal style={`--d:${i * 90}ms`}>
-        <span class={`ui-dot absolute top-1 left-0 size-[15px] rounded-full border-2 sm:top-0 ${i === steps.length - 1 ? 'border-accent bg-accent ring-4 ring-accent/20' : i >= 2 ? 'border-accent bg-accent' : 'border-muted bg-bg'}`}></span>
-        <p class="font-mono text-xs text-muted">{s.year}</p>
-        <p class="mt-1 font-display text-xl tracking-tight">{s.title}</p>
-        <p class="mt-1 text-sm leading-snug text-muted">{s.added}</p>
-      </li>
-    ))}
-  </ol>
-  </div>
-
-  <div class="mt-12 grid gap-4 sm:grid-cols-2">
-    {early.map(({ data }, i) => (
-      <a href={data.repo} target="_blank" rel="noopener" class="ui-card ui-tape group rounded-2xl border border-dashed border-line p-6 transition hover:border-accent/60 hover:bg-surface"
-        data-reveal style={`--d:${i * 80}ms`}>
-        <p class="font-mono text-xs text-muted">{data.year} · early work</p>
-        <h4 class="mt-2 font-display text-2xl tracking-tight">{data.title} <span class="text-base text-muted transition group-hover:text-accent">↗</span></h4>
-        <p class="mt-1 text-accent">{data.tagline}</p>
-        <p class="mt-3 text-[15px] leading-relaxed text-muted">{data.summary}</p>
-        <ul class="mt-4 flex flex-wrap gap-1.5">
-          {data.stack.map((s) => <li class="ui-pill rounded-full bg-surface px-2.5 py-0.5 font-mono text-[11px] text-muted group-hover:bg-bg">{s}</li>)}
-        </ul>
-      </a>
-    ))}
-  </div>
+  {more.length > 0 && (
+    <details class="ui-card group/more mt-12 rounded-3xl border border-line bg-surface" data-reveal>
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-7 sm:p-9 [&::-webkit-details-marker]:hidden">
+        <span>
+          <span class="block font-display text-2xl tracking-tight">More client work</span>
+          <span class="mt-1 block text-sm text-muted">{more.map((p) => p.data.title).join(' · ')}</span>
+        </span>
+        <span class="shrink-0 font-mono text-xl text-accent transition group-open/more:rotate-45" aria-hidden="true">+</span>
+      </summary>
+      <div class="divide-y divide-line border-t border-line">
+        {more.map(({ id, data }) => (
+          <article class="group relative p-7 sm:p-9">
+            <p class="font-mono text-[11px] uppercase tracking-wider text-muted">{data.statusLabel ?? statusLabel[data.status]}</p>
+            <h3 class="mt-2 font-display text-2xl tracking-tight">
+              <a href={`/projects/${id}/`} class="after:absolute after:inset-0 transition group-hover:text-accent">{data.title} <span class="inline-block text-base transition group-hover:translate-x-1">→</span></a>
+            </h3>
+            <p class="mt-1 text-accent">{data.tagline}</p>
+            <ul class="mt-4 space-y-2.5 text-[15px] leading-relaxed">
+              {data.points.map((p) => (
+                <li class="flex gap-3"><span class="mt-[.7em] h-px w-3 shrink-0 bg-accent"></span><span>{p}</span></li>
+              ))}
+            </ul>
+            <ul class="mt-5 flex flex-wrap gap-1.5">
+              {data.stack.map((s) => <li class="ui-pill rounded-full border border-line px-2.5 py-0.5 font-mono text-[11px] text-muted">{s}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </details>
+  )}
 </section>

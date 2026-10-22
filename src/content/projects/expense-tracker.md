@@ -6,11 +6,16 @@ kind: showcase
 year: "2026"
 platforms: [Web, API]
 stack: [Django, DRF, PostgreSQL, Celery, Redis, Docker, GitHub Actions]
-order: 2
+order: 3
 status: in-progress
+statusLabel: AI-assisted · hand rebuild in progress
+note: "Built with heavy AI assistance while I drove the design. Every decision and its rejected alternative is in docs/DECISIONS.md. I'm now rebuilding it by hand."
+points:
+  - "Database constraints make splits add up, and every query is scoped to its owner, so one account can never read or change another's records."
+  - "Settle-up locks the rows it touches with select_for_update, so two people settling at the same moment can't double-count a balance."
+  - "Celery jobs are queued with transaction.on_commit, so exports, the monthly digest and vision-LLM bill scanning never run against half-saved data."
 repo: https://github.com/Vatsal-Kanojiya/expense_management
 highlights:
-  - { value: "984", label: "automated tests, 95% coverage floor" }
   - { value: "22", label: "build phases, each planned and logged" }
   - { value: "70/70", label: "OWASP ASVS Level 1 requirements met (self-assessed)" }
 features:

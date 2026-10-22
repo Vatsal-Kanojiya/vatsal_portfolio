@@ -1,13 +1,18 @@
 ---
 title: Networking Platform
-tagline: A paid community that rewards showing up.
+tagline: Re-platformed an undocumented Laravel networking app onto Frappe, then added what it never had.
 summary: A membership platform for a business-networking community. Guests join, become members, attend coffee meets, events and Zoom sessions, and earn points and badges for taking part. One backend serves a mobile app, a web portal and an admin desk.
 kind: showcase
 year: "2026"
 platforms: [Android and iOS app, Web portal, Admin desk]
 stack: [Python, Frappe, MariaDB, Flutter, Vue, Zoom, Firebase]
-order: 4
+order: 2
 status: in-progress
+statusLabel: In production · client work
+points:
+  - "Reverse-engineered the legacy system with no source access, by driving the app and watching the database, then designed the replacement schema."
+  - "Attendance verified three ways (venue geofence, host confirmation, Zoom time-in-meeting ≥ 85%), with points created, moved and reversed by hooks as activities change."
+  - "Platform-tagged sessions with a per-platform cap and least-recently-used eviction. Record-creating actions are guarded by a dialog lock plus SELECT … FOR UPDATE, so a double click can't create two invoices."
 highlights:
   - { value: "~300", label: "API endpoints behind three front ends" }
   - { value: "10", label: "modules, from sign-in to notifications" }
@@ -29,5 +34,11 @@ features:
 - **Ledgers you can audit.** Points are an append-only ledger, so scores and badges can always be explained.
 - **Safe to retry.** Invoice generation is idempotent, so a repeated payment callback never creates a second invoice.
 - **A handbook of the system.** A full reverse-engineered guide covers rules, flows, endpoints and settings, with a traceability matrix generated from the code.
+
+## Problems worth telling
+
+- **Double payments from late callbacks.** The payment gateway's callback sometimes arrived about 15 minutes late, so a paid order still looked unpaid and people paid again. Now a new attempt first fetches the live status of any existing order for the same purchase: never attempted, it's cancelled and replaced; in flight, the user waits 30 minutes; captured, the record is synced. Five layers (callback, return to portal, next attempt, a 30-minute check and a nightly sync of unclear orders only) make every order's status converge, and each one fetches the live status from the gateway.
+- **A full disk from cloud storage.** Files were offloaded to S3, but the local copies were never deleted and the server's disk filled up, with some files not linked to any record at all. I turned on S3 versioning first as a safety net, then built a maintenance job that removed local copies already in S3 and cleaned up the orphans, with no production data lost.
+- **Images from templates.** Zoom backgrounds, flyers and testimonial cards started on Pillow and moved to HTML/CSS templates rendered in headless Chromium with Playwright, trading some generation time for print-quality output.
 
 <!-- TODO(Vatsal): confirm your role per version (not stated in the docs) and whether "in use" wording and the ~300 endpoint figure are OK to publish. -->

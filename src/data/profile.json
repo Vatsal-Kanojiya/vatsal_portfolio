@@ -2,8 +2,8 @@
   "name": "Vatsal Kanojiya",
   "role": "Python Backend Engineer",
   "location": "Bengaluru, India",
-  "headline": "I build the quiet machinery behind businesses.",
-  "intro": "Backend engineer shipping production ERP, billing, HR and payment systems on Frappe/ERPNext — and building on Django, DRF, Celery and PostgreSQL. I own delivery end to end: from the client workshop, through data modelling and APIs, to release.",
+  "headline": "Python backend engineer. I turn messy business operations into shipped systems: billing, inventory, payments.",
+  "intro": "Production ERP, billing, HR and payment systems on Frappe/ERPNext, and my own products on Django, DRF, Celery and PostgreSQL. Most of my work is data models, APIs, background jobs and the rules that keep money and stock correct when two things happen at once.",
   "careerStart": "2023-12-01",
   "email": "vatsalkanojiya@gmail.com",
   "links": {
@@ -14,9 +14,9 @@
   "openTo": "Open to backend roles — Django, Python, PostgreSQL.",
   "stats": [
     { "value": "{years}", "label": "years shipping production backends" },
-    { "value": "5–6", "label": "concurrent client projects owned" },
-    { "value": "5s → 1s", "label": "report time after killing N+1 queries" },
-    { "value": "50+", "label": "technical interviews conducted" }
+    { "value": "~300", "label": "API endpoints behind one backend and three front ends" },
+    { "value": "~50k", "label": "result PDFs pre-generated overnight to end a production overload" },
+    { "value": "5s → 1s", "label": "report time after removing N+1 queries" }
   ],
   "skills": [
     { "group": "Languages", "items": ["Python", "SQL", "JavaScript"] },

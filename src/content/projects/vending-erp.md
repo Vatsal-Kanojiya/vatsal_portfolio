@@ -1,13 +1,18 @@
 ---
 title: Vending ERP
-tagline: From the machine on site to the monthly invoice.
+tagline: Billing and operations ERP for a pan-India B2B vending operator.
 summary: The operations core of an ERP for a pan-India B2B vending operator. Coffee and tea machines sit at client sites, and the system tracks their stock, checks what was used, and builds each month's invoice for review.
 kind: showcase
 year: "2026"
 platforms: [Web, Mobile backend]
 stack: [Python, Frappe, ERPNext, MariaDB, Redis]
-order: 3
+order: 1
 status: in-progress
+statusLabel: In production · client work
+points:
+  - "Contracts become immutable once active. A change creates a new version cloned from the last, so every invoice traces back to the exact rules it was billed under."
+  - "Invoices claim meter readings by link and release them on cancel, so cancelling and regenerating an invoice can never bill a reading twice."
+  - "Two kinds of meter (cup counters, and litres × yield) feed one recipe model per item group, reconciled against actual stock movement to bill or waive each deviation."
 highlights:
   - { value: "12", label: "modules, from contracts to dashboards" }
   - { value: "446", label: "business rules documented and checked against the code" }
@@ -30,5 +35,12 @@ features:
 - **Every invoice is a draft first.** The system proposes, including charges for excess consumption, and a person accepts or skips each line.
 - **Built for changing requirements.** About 390 dated changes in roughly six months, so each rule is traced to the change that introduced it, and a rule catalogue is verified against the code.
 - **Six cooperating apps.** Operations, CRM, mobile backend, push notifications, WhatsApp and invoice customisation sit on top of Frappe and ERPNext.
+
+## More of the design
+
+- **Machines through a ~12-state lifecycle**, from dispatched to installed, flagged for maintenance, ready for pickup and returned. Spare parts are stock consumed through maintenance readings on the machine.
+- **Stock-out projection.** Daily burn from the contracted quantity, the last count and the last dispatch tells operations "by now this should be over", before the site runs dry.
+- **A CRM that can't lose a lead.** Hooks enforce that an activity is never just closed: a contact is closed with a reason or converted to a lead, and a lead is converted or lost. A "call back in a year" follow-up resurfaces on its own date.
+- **Field sales on mobile.** A Flutter app, built by the team's mobile developer, lets the sales team create contacts, leads and activities from the field.
 
 <!-- TODO(Vatsal): confirm role wording (docs say sole developer of the vending app) and whether it is in production use; docs only show go-live planned for 9-10 Oct 2026. -->
