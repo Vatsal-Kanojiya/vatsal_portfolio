@@ -8,7 +8,7 @@ platforms: [Web, Mobile backend]
 stack: [Python, Frappe, ERPNext, MariaDB, Redis]
 order: 1
 status: in-progress
-statusLabel: In production · client work
+statusLabel: In production · client work · sole developer
 points:
   - "Contracts become immutable once active. A change creates a new version cloned from the last, so every invoice traces back to the exact rules it was billed under."
   - "Invoices claim meter readings by link and release them on cancel, so cancelling and regenerating an invoice can never bill a reading twice."
@@ -43,4 +43,3 @@ features:
 - **A CRM that can't lose a lead.** Hooks enforce that an activity is never just closed: a contact is closed with a reason or converted to a lead, and a lead is converted or lost. A "call back in a year" follow-up resurfaces on its own date.
 - **Field sales on mobile.** A Flutter app, built by the team's mobile developer, lets the sales team create contacts, leads and activities from the field.
 
-<!-- TODO(Vatsal): confirm role wording (docs say sole developer of the vending app). Production status confirmed by Vatsal 2026-10-22. -->
