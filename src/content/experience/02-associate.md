@@ -15,6 +15,6 @@ highlights:
     text: Auto-generation, reassignment tracking and multi-channel dispatch. Automated recurring regulatory filings and subscription billing.
     tags: [Schedulers]
   - title: OTP-secured results portal
-    text: Delivered individualised S3-hosted result PDFs over WhatsApp and email, with background jobs handling bulk dispatch.
+    text: Delivered individualised S3-hosted result PDFs over messaging and email, with background jobs handling bulk dispatch.
     tags: [AWS S3, Background jobs]
 ---

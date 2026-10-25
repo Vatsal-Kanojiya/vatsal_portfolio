@@ -1,7 +1,7 @@
 ---
 title: Vending ERP
 tagline: Billing and operations ERP for a pan-India B2B vending operator.
-summary: The operations core of an ERP for a pan-India B2B vending operator. Coffee and tea machines sit at client sites, and the system tracks their stock, checks what was used, and builds each month's invoice for review.
+summary: The operations core of an ERP for a pan-India B2B vending operator. Beverage machines sit at client sites, and the system tracks their stock, checks what was used, and builds each month's invoice for review.
 kind: showcase
 year: "2026"
 platforms: [Web, Mobile backend]
@@ -12,16 +12,16 @@ statusLabel: In production · client work
 points:
   - "Contracts become immutable once active. A change creates a new version cloned from the last, so every invoice traces back to the exact rules it was billed under."
   - "Invoices claim meter readings by link and release them on cancel, so cancelling and regenerating an invoice can never bill a reading twice."
-  - "Two kinds of meter (cup counters, and litres × yield) feed one recipe model per item group, reconciled against actual stock movement to bill or waive each deviation."
+  - "Two kinds of meter (unit counters, and volume × yield) feed one consumption-formula model per item group, reconciled against actual stock movement to bill or waive each deviation."
 highlights:
   - { value: "12", label: "modules, from contracts to dashboards" }
   - { value: "446", label: "business rules documented and checked against the code" }
-  - { value: "4", label: "billing models: cup, litre, kg, flat package" }
+  - { value: "4", label: "billing models: per unit served, per volume, per weight, flat package" }
 features:
-  - { title: "One contract per site", text: "Machines, prices, recipes and commitments live in one contract, which locks once it is active." }
-  - { title: "Four ways to bill", text: "Per cup, per litre, per kg delivered or a flat package, with machine rental and minimum-order rules on top." }
+  - { title: "One contract per site", text: "Machines, prices, consumption formulas and commitments live in one contract, which locks once it is active." }
+  - { title: "Four ways to bill", text: "Per unit served, per volume, per weight delivered or a flat package, with machine rental and minimum-order rules on top." }
   - { title: "Stock you can trace", text: "Stock is followed from head office, through transit, to the site, with a delivery challan at each step." }
-  - { title: "Counts checked against recipes", text: "Physical counts and meter readings are compared with what the recipes say should have been used. Interchangeable ingredients are treated as one pool." }
+  - { title: "Counts checked against formulas", text: "Physical counts and meter readings are compared with what the consumption formulas say should have been used. Interchangeable ingredients are treated as one pool." }
   - { title: "Invoices built for you", text: "Each month's draft invoice comes from approved readings or deliveries. An accountant reviews it line by line before it is submitted." }
   - { title: "Machines through their life", text: "Dispatch, delivery, install, maintenance and return are tracked per machine, with undo and safety checks." }
   - { title: "Separate who counts, approves and invoices", text: "Roles keep those jobs apart, and profitability is visible to management only." }
@@ -34,7 +34,7 @@ features:
 - **The server decides.** Rules are enforced on the server, not only in the form. Ambiguous data is refused rather than guessed, and stock changes only through one audited path.
 - **Every invoice is a draft first.** The system proposes, including charges for excess consumption, and a person accepts or skips each line.
 - **Built for changing requirements.** About 390 dated changes in roughly six months, so each rule is traced to the change that introduced it, and a rule catalogue is verified against the code.
-- **Six cooperating apps.** Operations, CRM, mobile backend, push notifications, WhatsApp and invoice customisation sit on top of Frappe and ERPNext.
+- **Six cooperating apps.** Operations, CRM, mobile backend, push notifications, messaging and invoice customisation sit on top of Frappe and ERPNext.
 
 ## More of the design
 
@@ -43,4 +43,4 @@ features:
 - **A CRM that can't lose a lead.** Hooks enforce that an activity is never just closed: a contact is closed with a reason or converted to a lead, and a lead is converted or lost. A "call back in a year" follow-up resurfaces on its own date.
 - **Field sales on mobile.** A Flutter app, built by the team's mobile developer, lets the sales team create contacts, leads and activities from the field.
 
-<!-- TODO(Vatsal): confirm role wording (docs say sole developer of the vending app) and whether it is in production use; docs only show go-live planned for 9-10 Oct 2026. -->
+<!-- TODO(Vatsal): confirm role wording (docs say sole developer of the vending app). Production status confirmed by Vatsal 2026-10-22. -->
