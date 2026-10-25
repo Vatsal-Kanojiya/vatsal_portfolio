@@ -26,7 +26,7 @@
     { "group": "Tooling", "items": ["Django tests / unittest", "Git", "GitHub Actions", "Docker Compose", "Gunicorn", "Nginx", "Linux", "AWS EC2 / S3"] },
     { "group": "Integrations", "items": ["Razorpay", "Messaging APIs (WhatsApp, SMS, email)", "Push notifications (FCM)", "Video-meeting APIs", "Biometric devices", "AWS S3 storage"] }
   ],
-  "workSummary": "5 client systems in production or pilot, plus reusable Frappe apps used across client projects (~3 years).",
+  "workSummary": "5 client systems in production or pilot, plus reusable Frappe apps used across client projects, since 2023.",
   "apps": [
     { "title": "HR Layer", "role": "Lead developer", "text": "Adds what stock HRMS v15 lacks: absence regularisation, shift rules, geofenced and biometric check-in, overtime and comp-off, dashboards and reports.", "plug": "One settings form per client; hooks, overrides and nightly jobs, no core edits.", "href": "/projects/hrms-attendance/" },
     { "title": "CRM App", "text": "Business contacts become leads, with activities and follow-ups on both, droppable into any client site." },
