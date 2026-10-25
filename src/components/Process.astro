@@ -4,16 +4,17 @@ import SectionHead from './SectionHead.astro';
 ---
 <section class="bg-band text-band-ink">
   <div class="mx-auto max-w-5xl px-6 py-20 [--muted:color-mix(in_oklab,var(--band-ink)_62%,var(--band))] [--accent:var(--band-ink)]">
-    <SectionHead index="05" eyebrow="How I work" title="AI agents write code.<br/><em class='text-warm'>I own what ships.</em>"
-      lead="I use Claude Code daily under a spec-first process. Speed from the agent, rigour from the process." />
-    <ol class="grid gap-px overflow-hidden rounded-2xl bg-band-ink/15 sm:grid-cols-2 lg:grid-cols-4">
+    <SectionHead index="05" eyebrow="How I work" title="Hand-built first. Agentic now.<br/><em class='text-warm'>Disciplined throughout.</em>"
+      lead="For three years I wrote production ERP code by hand, so I know where an AI agent cuts corners. Today I build with coding agents through a documented process, not vibe coding." />
+    <ol class="grid gap-px overflow-hidden rounded-2xl bg-band-ink/15 sm:grid-cols-2 lg:grid-cols-5">
       {profile.process.map((p, i) => (
-        <li class="bg-band p-6" data-reveal style={`--d:${i * 90}ms`}>
+        <li class="bg-band p-6 sm:last:col-span-2 lg:last:col-span-1" data-reveal style={`--d:${i * 90}ms`}>
           <p class="font-mono text-xs text-warm">0{i + 1}</p>
           <h3 class="mt-2 font-display text-xl">{p.step}</h3>
           <p class="mt-3 text-[15px] leading-relaxed opacity-70">{p.text}</p>
         </li>
       ))}
     </ol>
+    <p class="mt-6 text-sm opacity-70" data-reveal>Process adapted from open community skill sets (e.g. Matt Pocock's refine-before-building skills), tuned per project.</p>
   </div>
 </section>

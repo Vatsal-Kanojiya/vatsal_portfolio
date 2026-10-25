@@ -41,9 +41,10 @@
     }
   },
   "process": [
-    { "step": "Spec", "text": "Write acceptance criteria before a line of code. The spec is the contract — for me and for the agent." },
-    { "step": "Build", "text": "Claude Code agents implement against the spec. I steer architecture, data model and edge cases." },
-    { "step": "Verify", "text": "Verification scripts run inside rolled-back transactions, so real data is exercised and nothing is left behind." },
-    { "step": "Review", "text": "Every generated diff is read by me. That's how a quantity above the top slab billing at ₹0 got caught before release." }
+    { "step": "Grill", "text": "Pressure-test the idea with the agent: edge cases, data model, failure modes." },
+    { "step": "Spec", "text": "Agreed decisions become a written spec with acceptance criteria." },
+    { "step": "Slice", "text": "Epics broken into small, independently shippable tickets." },
+    { "step": "Test → Build", "text": "Criteria become tests (moving to strict test-first); the agent builds against them." },
+    { "step": "Review", "text": "Every diff is read by me. That's how a quantity above the top slab billing at ₹0 got caught before release." }
   ]
 }
