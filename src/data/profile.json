@@ -16,7 +16,7 @@
     { "value": "{years}", "label": "years shipping production backends" },
     { "value": "~300", "label": "API endpoints behind one backend and three front ends" },
     { "value": "~50k", "label": "result PDFs pre-generated overnight to end a production overload" },
-    { "value": "5s → 1s", "label": "report time after removing N+1 queries" }
+    { "value": "~5s → ~1s", "label": "report time after removing N+1 queries" }
   ],
   "skills": [
     { "group": "Languages", "items": ["Python", "SQL", "JavaScript (Frappe Desk: client scripts, dashboards)"] },

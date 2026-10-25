@@ -21,7 +21,7 @@ features:
   - { title: "Days that need action, nothing else", text: "For any date range, each employee-day is checked against approved leave, on-duty requests and hours worked. Only the days that need a fix are listed, with the reason in plain words and one click to apply leave or on-duty." }
   - { title: "Shift rules HRMS can't express", text: "Assign shifts in bulk with rules like \"2nd and 4th Saturday\". Overlaps are caught before anything is saved, and rolling back is refused once attendance depends on it." }
   - { title: "Check-in the right way per person", text: "Each employee punches by biometric device or by mobile, and a mobile punch counts only from inside their branch's geofence." }
-  - { title: "Attendance that fills itself in", text: "Nightly jobs close missed punches and mark no-punch shifts present, so there are no false absent days." }
+  - { title: "Attendance that fills itself in", text: "Nightly jobs close missed punches and mark no-punch shifts present, so fewer days need manual correction." }
   - { title: "Dashboards for today", text: "Who is in, first in and last out, breaks and lateness, pending leaves with approve shortcuts, on-duty requests, holidays and celebrations." }
   - { title: "Reports payroll can trust", text: "Attendance against shift, a monthly matrix and calendar, a salary estimate that lists its blockers, the salary register, and an overtime and comp-off register." }
 ---

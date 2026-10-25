@@ -16,7 +16,7 @@ highlights:
     text: Replaced hard-coded vendor calls with a database-configurable notification router. Two incompatible APIs sit behind one interface and 12 call sites moved onto it, so switching provider is now a settings change.
     tags: [Integrations, Design]
   - title: Service contracts for HVAC
-    text: Modelled installed equipment, AMC contracts, scheduled visits, spare-part use, warranty claims and CRM follow-ups, with technician dashboards showing visit rosters against live van stock.
+    text: Modelled installed equipment, AMC contracts, scheduled visits, spare-part use, warranty claims and CRM follow-ups, with technician dashboards showing visit rosters against live van stock. Currently a pilot.
     tags: [Domain modelling]
   - title: HR that fixes itself overnight
     text: Nightly auto-attendance for shift and half-day rules, geofenced mobile check-in, a biometric webhook and self-service dashboards that replaced month-end HR correction cycles.

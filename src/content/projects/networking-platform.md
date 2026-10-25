@@ -12,7 +12,7 @@ statusLabel: In production · client work
 points:
   - "Reverse-engineered the legacy system with no source access, by driving the app and watching the database, then designed the replacement schema."
   - "Attendance verified three ways (venue geofence, host confirmation, video-call time-in-meeting ≥ 85%), with points created, moved and reversed by hooks as activities change."
-  - "Platform-tagged sessions with a per-platform cap and least-recently-used eviction. Record-creating actions are guarded by a dialog lock plus SELECT … FOR UPDATE, so a double click can't create two invoices."
+  - "Platform-tagged sessions with a per-platform cap and least-recently-used eviction. Record-creating actions are guarded by a dialog lock plus SELECT … FOR UPDATE, so a double click on approval can't create a second invoice or membership."
 highlights:
   - { value: "~300", label: "API endpoints behind three front ends" }
   - { value: "10", label: "modules, from sign-in to notifications" }
@@ -31,7 +31,7 @@ features:
 ## Under the hood, briefly
 
 - **Business rules live in one place.** A single app owns every rule. The apps for messaging, video calls and storage only send, store or fetch.
-- **Ledgers you can audit.** Points are an append-only ledger, so scores and badges can always be explained.
+- **A points ledger that stays honest.** Points are credit and debit entries: redemptions against membership fees are recorded as debits, admins can exclude an entry without deleting it, and scores are kept in sync with the activities behind them through hooks.
 - **Safe to retry.** Invoice generation is idempotent, so a repeated payment callback never creates a second invoice.
 - **A handbook of the system.** A full reverse-engineered guide covers rules, flows, endpoints and settings, with a traceability matrix generated from the code.
 

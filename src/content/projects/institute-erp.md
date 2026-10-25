@@ -42,4 +42,6 @@ The institute sends each student a monthly report of the tests they took. The se
 - **The fix, overnight.** Rendering tens of thousands of PDFs one after another would have taken most of a day, so I raised the long-queue worker count and queued one background job per student. Each job renders the PDF in memory, uploads it to S3 and stores a pre-signed link on the student's record. The result link now only looks up that record and redirects, so the server never renders on click. Downloads worked the next morning.
 - **What I'd do before the next blast.** Precompute expensive output before a mass send, keep heavy work in background jobs, and roll out in stages (say a thousand first) or load-test the endpoint first.
 
-<!-- TODO(Vatsal): confirm your role and year. The docs' SOW is an unsigned draft and the pitch is a sales document; only the as-is docs describe real code. Usage looked low in April 2025 (scheduling, attendance, payouts barely used), so no usage claims are made. Confirm 32 document types / 10 reports are OK to publish. -->
+## My role
+
+Built across Sep 2024 – Apr 2025; moved from Associate to Software Engineer during it; owned features and guided a junior developer.
