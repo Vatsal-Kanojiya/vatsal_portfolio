@@ -14,8 +14,8 @@ const projects = defineCollection({
       summary: z.string(),
       stack: z.array(z.string()),
       order: z.number().default(99),
-      // showcase = flagship card; more = inside "More client work"; early = 2023 work
-      kind: z.enum(['showcase', 'more', 'early']).default('showcase'),
+      // showcase = flagship card; more = "More client work" row; app = page behind a reusable-app tile; early = 2023 work
+      kind: z.enum(['showcase', 'more', 'app', 'early']).default('showcase'),
       year: z.string(),
       platforms: z.array(z.string()).default([]),
       features: z.array(z.object({ title: z.string(), text: z.string() })).default([]),

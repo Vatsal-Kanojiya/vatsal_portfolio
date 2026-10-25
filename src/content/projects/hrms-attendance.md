@@ -1,36 +1,35 @@
 ---
-title: HR and Attendance
-tagline: Attendance that fills itself in overnight.
-summary: A customisation layer on Frappe and ERPNext HRMS for a services company with a mixed workforce. Staff punch in by biometric device or mobile, and the system turns raw punches into correct attendance without HR chasing it.
-kind: more
-year: "2026"
-platforms: [Web, Mobile API]
+title: HR Layer
+tagline: The HR features stock HRMS lacks, installed per client.
+summary: The company's own HR app on top of Frappe HRMS v15, installed for each client that runs HR on it. It adds absence regularisation, rule-based shifts, geofenced and biometric check-in, overtime and comp-off, dashboards and reports, without replacing a single core table.
+kind: app
+year: "2025–26"
+platforms: [Desk, Mobile API, Dashboards]
 stack: [Python, Frappe, ERPNext HRMS, MariaDB]
-order: 5
-status: in-progress
-statusLabel: In production · client work
+order: 8
+status: live
+statusLabel: In production · installed per client · lead developer
 points:
-  - "Overnight jobs turn raw biometric and mobile punches into attendance, closing missing punches and handling leave and half-days."
-  - "Device punches are logged first and are safe to retry, so a repeated biometric message never double-counts."
-  - "Corrections keep what they replaced, so cancelling one restores the day exactly. All of it sits in hooks and overrides, with no changes to the framework core."
+  - "One settings form drives behaviour per client (check-in channel per employee, geofence per branch, auto-attendance shifts, half-day shifts, go-live date), so a new client is configuration, not code."
+  - "An absence regularisation engine scores every employee-day in a range and lists only the days that need action, with a plain reason and a one-click fix. Month-end HR chasing became a self-service worklist."
+  - "Rule-based bulk shift assignment with an overlap pre-check and a savepoint per assignment, so one bad row doesn't sink the batch."
 highlights:
-  - { value: "23", label: "documented business rules" }
-  - { value: "3", label: "scheduled jobs that run overnight" }
-  - { value: "0", label: "changes to the framework's core code" }
+  - { value: "48", label: "API endpoints for the mobile app, desk and dashboards" }
+  - { value: "11", label: "live action cards on the HR and employee workspaces" }
+  - { value: "6", label: "attendance and payroll reports" }
 features:
-  - { title: "Attendance fills itself", text: "Overnight jobs mark attendance, close missing punches and handle leave and half-days, so there are no false Absent days." }
-  - { title: "A punch policy per employee", text: "Each person can follow biometric, mobile or manual punching, as their role needs." }
-  - { title: "Mobile punches checked by location", text: "A mobile punch is accepted only when it is made from the right branch." }
-  - { title: "Fix a day in one step", text: "An approved correction rewrites that day's records. Cancelling it restores them exactly." }
-  - { title: "Approvals with an owner", text: "Each request goes to the person's named manager, with an HR admin as fallback, and every step is logged." }
-  - { title: "A dashboard that explains itself", text: "Employees see why a day looks wrong and can raise a fix themselves." }
-  - { title: "Biometric devices, safely", text: "Device punches are logged first and are safe to retry, so a repeated message never double-counts." }
+  - { title: "Days that need action, nothing else", text: "For any date range, each employee-day is checked against approved leave, on-duty requests and hours worked. Only the days that need a fix are listed, with the reason in plain words and one click to apply leave or on-duty." }
+  - { title: "Shift rules HRMS can't express", text: "Assign shifts in bulk with rules like \"2nd and 4th Saturday\". Overlaps are caught before anything is saved, and rolling back is refused once attendance depends on it." }
+  - { title: "Check-in the right way per person", text: "Each employee punches by biometric device or by mobile, and a mobile punch counts only from inside their branch's geofence." }
+  - { title: "Attendance that fills itself in", text: "Nightly jobs close missed punches and mark no-punch shifts present, so there are no false absent days." }
+  - { title: "Dashboards for today", text: "Who is in, first in and last out, breaks and lateness, pending leaves with approve shortcuts, on-duty requests, holidays and celebrations." }
+  - { title: "Reports payroll can trust", text: "Attendance against shift, a monthly matrix and calendar, a salary estimate that lists its blockers, the salary register, and an overtime and comp-off register." }
 ---
 
 ## Under the hood, briefly
 
-- **Extended, not forked.** Behaviour is added through controller overrides, document hooks and scheduled jobs, so the framework's own code stays untouched and upgrades stay possible.
-- **Reversible by design.** Corrections keep what they replaced, which is how cancelling can restore a day exactly.
-- **Known issues are written down.** The project keeps a documented defect register next to its requirements.
+- **Extended, not forked.** Everything hooks in through overrides, document events, settings and nightly jobs. Custom fields are created on migrate, so installing it on a new site is one step and core upgrades stay possible.
+- **Fast over a whole month.** The absence engine prefetches everything it needs in bulk: seven queries for the whole date range, not one per employee-day.
+- **Safe batches.** Bulk shift assignment runs each row in its own savepoint and checks overlaps first.
 
-<!-- TODO(Vatsal): confirm your role, dates, team size, headcount/branches and whether it is live. Docs hold scope counts only, no outcomes. The "0 core changes" highlight comes from the docs' stance; confirm. -->
+I'm the lead developer, with the majority of the app's commits from November 2025 to September 2026.

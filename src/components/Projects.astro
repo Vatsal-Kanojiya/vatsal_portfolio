@@ -13,7 +13,7 @@ const statusLabel = { live: 'Live', 'in-progress': 'In progress', archived: 'Arc
 ---
 <section id="projects" class="mx-auto max-w-5xl px-6 py-28">
   <SectionHead index="01" eyebrow="Projects" title="Systems in production,<br/><em class='text-accent'>and what I build after hours.</em>"
-    lead="Two client systems running in production and two products of my own. Client names are withheld; the engineering is shown in full."
+    lead={`${profile.workSummary} The two client flagships and two products of my own come first. Client names are withheld; the engineering is shown in full.`}
     note={profile.paper.notes.projects} />
 
   <div class="space-y-8">
@@ -53,34 +53,63 @@ const statusLabel = { live: 'Live', 'in-progress': 'In progress', archived: 'Arc
     ))}
   </div>
 
-  {more.length > 0 && (
-    <details class="ui-card group/more mt-12 rounded-3xl border border-line bg-surface" data-reveal>
-      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-7 sm:p-9 [&::-webkit-details-marker]:hidden">
-        <span>
-          <span class="block font-display text-2xl tracking-tight">More client work</span>
-          <span class="mt-1 block text-sm text-muted">{more.map((p) => p.data.title).join(' · ')}</span>
-        </span>
-        <span class="shrink-0 font-mono text-xl text-accent transition group-open/more:rotate-45" aria-hidden="true">+</span>
-      </summary>
-      <div class="divide-y divide-line border-t border-line">
-        {more.map(({ id, data }) => (
-          <article class="group relative p-7 sm:p-9">
-            <p class="font-mono text-[11px] uppercase tracking-wider text-muted">{data.statusLabel ?? statusLabel[data.status]}</p>
-            <h3 class="mt-2 font-display text-2xl tracking-tight">
-              <a href={`/projects/${id}/`} class="after:absolute after:inset-0 transition group-hover:text-accent">{data.title} <span class="inline-block text-base transition group-hover:translate-x-1">→</span></a>
-            </h3>
-            <p class="mt-1 text-accent">{data.tagline}</p>
-            <ul class="mt-4 space-y-2.5 text-[15px] leading-relaxed">
-              {data.points.map((p) => (
-                <li class="flex gap-3"><span class="mt-[.7em] h-px w-3 shrink-0 bg-accent"></span><span>{p}</span></li>
-              ))}
-            </ul>
-            <ul class="mt-5 flex flex-wrap gap-1.5">
+  <div class="mt-20" data-reveal>
+    <p class="font-mono text-xs uppercase tracking-[.2em] text-accent">More client work</p>
+    <h3 class="mt-3 font-display text-3xl tracking-tight sm:text-4xl">Every system I've shipped, <em class="text-accent">in brief.</em></h3>
+    <p class="mt-3 max-w-2xl text-muted">Open a row for one operations, one dashboard or report, and one engineering highlight.</p>
+  </div>
+  <div class="ui-card mt-8 divide-y divide-line overflow-hidden rounded-3xl border border-line bg-surface" data-reveal>
+    {more.map(({ id, data }) => (
+      <details class="group/row">
+        <summary class="flex cursor-pointer list-none items-start justify-between gap-4 p-6 transition hover:bg-accent-soft/40 sm:items-center sm:p-7 [&::-webkit-details-marker]:hidden">
+          <span class="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+            <span class="font-display text-xl tracking-tight sm:shrink-0 sm:text-2xl">{data.title}</span>
+            <span class="text-sm text-muted">{data.tagline}</span>
+          </span>
+          <span class="flex shrink-0 items-center gap-3">
+            <span class="ui-pill hidden rounded-full border border-line px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted md:inline">{data.statusLabel ?? statusLabel[data.status]}</span>
+            <span class="font-mono text-xl text-accent transition group-open/row:rotate-45" aria-hidden="true">+</span>
+          </span>
+        </summary>
+        <div class="px-6 pb-7 sm:px-7">
+          <p class="ui-pill mb-4 inline-block rounded-full border border-line px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted md:hidden">{data.statusLabel ?? statusLabel[data.status]}</p>
+          <ul class="space-y-3 text-[15px] leading-relaxed">
+            {data.points.map((p) => {
+              const m = p.match(/^(Operations|Dashboards|Reports|Engineering): (.*)$/);
+              return (
+                <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr] sm:gap-4">
+                  <span class="font-mono text-[11px] uppercase tracking-wider text-accent sm:pt-1">{m ? m[1] : ''}</span>
+                  <span>{m ? m[2][0].toUpperCase() + m[2].slice(1) : p}</span>
+                </li>
+              );
+            })}
+          </ul>
+          {data.note && <p class="mt-4 text-sm italic text-muted">{data.note}</p>}
+          <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <ul class="flex flex-wrap gap-1.5">
               {data.stack.map((s) => <li class="ui-pill rounded-full border border-line px-2.5 py-0.5 font-mono text-[11px] text-muted">{s}</li>)}
             </ul>
-          </article>
-        ))}
-      </div>
-    </details>
-  )}
+            <a href={`/projects/${id}/`} class="text-sm font-medium transition hover:text-accent">Read more →</a>
+          </div>
+        </div>
+      </details>
+    ))}
+  </div>
+
+  <div class="mt-20" data-reveal>
+    <p class="font-mono text-xs uppercase tracking-[.2em] text-accent">Reusable apps</p>
+    <h3 class="mt-3 font-display text-3xl tracking-tight sm:text-4xl">Built once, <em class="text-accent">installed across client projects.</em></h3>
+  </div>
+  <ul class="mt-8 grid gap-4 md:grid-cols-3">
+    {profile.apps.map((a, i) => (
+      <li class="ui-card ui-tape group relative flex flex-col rounded-2xl border border-line bg-surface p-6 transition hover:border-accent/50" data-reveal style={`--d:${i * 80}ms`}>
+        <p class="font-mono text-[11px] uppercase tracking-wider text-muted">{a.role ?? 'Installed across client projects'}</p>
+        <h4 class="mt-2 font-display text-2xl tracking-tight">
+          {a.href ? <a href={a.href} class="after:absolute after:inset-0 transition group-hover:text-accent">{a.title} <span class="text-base">→</span></a> : a.title}
+        </h4>
+        <p class="mt-3 text-[15px] leading-relaxed">{a.text}</p>
+        {a.plug && <p class="mt-auto pt-4 text-sm leading-relaxed text-muted">{a.plug}</p>}
+      </li>
+    ))}
+  </ul>
 </section>

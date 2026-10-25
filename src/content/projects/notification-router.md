@@ -2,10 +2,10 @@
 title: Notification Router
 tagline: Switch WhatsApp or SMS vendors from settings, not code.
 summary: One messaging layer used across the company's client projects. Project code asks for a WhatsApp, SMS, email or push message, and the router decides which vendor sends it, based on admin settings.
-kind: more
-year: "2025"
+kind: app
+year: "2025" # TODO(Vatsal): confirm year
 platforms: [Shared Frappe app]
-stack: [Python, Frappe, WhatsApp Business API, SMS gateways, FCM, Email]
+stack: [Python, Frappe, Messaging APIs, Push notifications, Email]
 order: 7
 status: live
 statusLabel: In production · used across client projects
@@ -26,4 +26,10 @@ features:
 - **Why it exists.** Vendor calls used to sit inside each project app, so switching vendors meant editing every call site. Twelve call sites moved onto the router.
 - **Test mode.** The router compares the current site URL with the production URL stored in its settings. When they differ, every message goes to a configured test email, number or device token, with an optional log-only switch.
 
-<!-- TODO(Vatsal): confirm the year (2025 is a guess from your role start date). -->
+## The other integration apps
+
+The same pattern, one small app per vendor or service, each switched on through settings:
+
+- **Video meetings.** Integrates a video-conferencing API: recurring meetings, participant reports and time-in-meeting, which client projects use for attendance.
+- **Push notifications.** Mobile push as one more channel behind the router.
+- **File storage paths.** Extends the open-source S3 attachments app so each project decides the path its files are stored under.
