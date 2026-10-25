@@ -1,5 +1,9 @@
 # Roadmap & ideas log
 
+> **FREEZE: November 2026 (owner decision, 2026-10-25).** The portfolio (v3) is frozen.
+> The **only** allowed changes are updates to his **personal projects** (Super Notes, Expense Tracker): status, live links when they come out of maintenance, new features.
+> No copy polishing, no new sections, no redesigns, no client-work edits. If Vatsal asks for any of those in November, remind him of this freeze first.
+
 Ideas are logged here so they aren't lost. The current focus is **content and deployment first**; the experiments come after.
 
 ## Now: main content
