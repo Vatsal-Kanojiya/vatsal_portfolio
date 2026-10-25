@@ -19,7 +19,7 @@
     { "value": "5s → 1s", "label": "report time after removing N+1 queries" }
   ],
   "skills": [
-    { "group": "Languages", "items": ["Python", "SQL", "JavaScript"] },
+    { "group": "Languages", "items": ["Python", "SQL", "JavaScript (Frappe Desk: client scripts, dashboards)"] },
     { "group": "Frameworks", "items": ["Django", "Django REST Framework", "Frappe / ERPNext v15"] },
     { "group": "Backend", "items": ["REST APIs", "Celery", "Redis / RQ jobs", "Schedulers", "Transactions & row locking", "Query optimisation"] },
     { "group": "Data", "items": ["PostgreSQL", "pgvector", "Full-text search", "MySQL / MariaDB", "Schema design", "Indexing"] },

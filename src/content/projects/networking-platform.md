@@ -41,4 +41,6 @@ features:
 - **A full disk from cloud storage.** Files were offloaded to S3, but the local copies were never deleted and the server's disk filled up, with some files not linked to any record at all. I turned on S3 versioning first as a safety net, then built a maintenance job that removed local copies already in S3 and cleaned up the orphans, with no production data lost.
 - **Images from templates.** Event backgrounds, flyers and testimonial cards started on Pillow and moved to HTML/CSS templates rendered in headless Chromium with Playwright, trading some generation time for print-quality output.
 
-<!-- TODO(Vatsal): confirm your role per version (not stated in the docs) and whether "in use" wording and the ~300 endpoint figure are OK to publish. -->
+## My role
+
+I designed the schema, the architecture and the features, and built about 75% of the backend with one other developer. I also handle small fixes on its Vue web app.
