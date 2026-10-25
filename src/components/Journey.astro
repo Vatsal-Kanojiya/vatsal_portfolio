@@ -30,7 +30,7 @@ const dot: Record<string, string> = {
           <div class="md:pl-10">
             <h3 class="font-display text-xl tracking-tight">{data.title}</h3>
             {data.place && <p class="mt-1 text-sm text-accent">{data.place}</p>}
-            <div class="mt-2 max-w-xl text-[15px] leading-relaxed text-muted"><Content /></div>
+            <div class="mt-2 max-w-xl text-[15px] leading-relaxed text-muted [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-2"><Content /></div>
             {data.image && (
               <Image src={data.image} alt={data.imageAlt ?? data.title} widths={[480, 960]} sizes="(min-width: 768px) 36rem, 100vw"
                 class="ui-photo mt-5 aspect-[16/9] w-full max-w-xl rounded-2xl border border-line object-cover" />
